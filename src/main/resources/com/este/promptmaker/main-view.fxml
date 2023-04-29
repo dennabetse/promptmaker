@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane prefHeight="728.0" prefWidth="512.0" xmlns="http://javafx.com/javafx/1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.este.promptmaker.MainController">
+   <top>
+      <MenuBar BorderPane.alignment="CENTER">
+        <menus>
+          <Menu mnemonicParsing="false" text="Tags">
+            <items>
+              <MenuItem mnemonicParsing="false" onAction="#onEnglishTagsClick" text="English" />
+                  <MenuItem mnemonicParsing="false" onAction="#onFrenchTagsClick" text="French" />
+                  <MenuItem mnemonicParsing="false" onAction="#onGermanTagsClick" text="German" />
+                  <MenuItem mnemonicParsing="false" onAction="#onHungarianTagsClick" text="Hungarian" />
+                  <MenuItem mnemonicParsing="false" onAction="#onSpanishTagsClick" text="Spanish" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Editing">
+            <items>
+              <MenuItem mnemonicParsing="false" onAction="#onAutomaticInputClick" text="Automatic input" />
+                  <MenuItem mnemonicParsing="false" onAction="#onManualInputClick" text="Manual input" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Help">
+            <items>
+              <MenuItem mnemonicParsing="false" onAction="#onAboutClick" text="About" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+   </top>
+   <center>
+      <GridPane hgap="10.0" vgap="10.0" BorderPane.alignment="CENTER">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints />
+          <RowConstraints />
+          <RowConstraints />
+            <RowConstraints prefHeight="230.0" />
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints prefHeight="250.0" />
+            <RowConstraints />
+        </rowConstraints>
+         <padding>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+         </padding>
+         <children>
+            <HBox spacing="10.0">
+               <children>
+                  <Label text="Type of prompt:" />
+                  <ChoiceBox fx:id="choiceBox" prefWidth="70.0" />
+                  <CheckBox fx:id="checkedCustomFilename" mnemonicParsing="false" text="Custom filename" />
+                  <TextField fx:id="filenameBox" prefWidth="175.0" visible="false" />
+               </children>
+            </HBox>
+            <Label text="Type the question" GridPane.rowIndex="1" />
+            <TextField fx:id="questionBox" GridPane.rowIndex="2" />
+            <VBox prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.rowIndex="3">
+               <children>
+                  <HBox fx:id="imageTypeBox" spacing="5.0">
+                     <children>
+                        <Button minWidth="85.0" mnemonicParsing="false" onAction="#onSelectImageClick" text="Select image">
+                           <HBox.margin>
+                              <Insets top="20.0" />
+                           </HBox.margin>
+                        </Button>
+                        <Label fx:id="imagePathLabel" text="...">
+                           <HBox.margin>
+                              <Insets top="25.0" />
+                           </HBox.margin>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <CheckBox fx:id="resizeImage" mnemonicParsing="false" text="Resize image (experimental)" style="-fx-font-size: 13;"/>
+               </children>
+            </VBox>
+            <VBox fx:id="textTypeBox" prefHeight="200.0" prefWidth="100.0" spacing="10.0" visible="false" GridPane.rowIndex="3">
+               <children>
+                  <Label text="Text content" />
+                  <TextArea fx:id="textContentBox" prefHeight="200.0" prefWidth="200.0" />
+               </children>
+            </VBox>
+            <Label text="Enter possible answer(s) (each on a separate line)" GridPane.rowIndex="4" />
+            <TextArea fx:id="answersBox" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="5" />
+            <Label text="Enter possible short(s) (separated by a comma &quot;,&quot;) (optional)" GridPane.rowIndex="6" />
+            <TextField fx:id="shorthandsBox" GridPane.rowIndex="7" />
+            <Label text="Details (optional)" GridPane.rowIndex="8" />
+            <TextArea fx:id="detailsBox" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="9" />
+            <Label text="Submitter name (optional)" GridPane.rowIndex="10" />
+            <TextField fx:id="submitterBox" GridPane.rowIndex="11" />
+            <VBox fx:id="manualTagsBox" prefHeight="200.0" prefWidth="100.0" spacing="10.0" visible="false" GridPane.rowIndex="12">
+               <children>
+                  <Label text="Enter the tags the prompt should be in (each on a separate line)" />
+                  <TextArea fx:id="tagsInputBox" prefHeight="200.0" prefWidth="200.0" />
+               </children>
+            </VBox>
+            <VBox fx:id="automaticTagsBox" prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.rowIndex="12">
+               <children>
+                  <Label text="Select the tags the prompt should be in" />
+                  <ScrollPane prefHeight="200.0" prefWidth="200.0" style="-fx-background: #f8f8f8;">
+                     <content>
+                        <VBox fx:id="tagsListBox" spacing="5.0" style="-fx-font-size: 13;">
+                           <padding>
+                              <Insets bottom="5.0" left="10.0" right="5.0" top="5.0" />
+                           </padding>
+                        </VBox>
+                     </content>
+                  </ScrollPane>
+               </children>
+            </VBox>
+            <HBox spacing="10.0" GridPane.rowIndex="13">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#onGenerateJsonButtonClick" text="Generate JSON" />
+                  <Button mnemonicParsing="false" onAction="#onClearButtonClick" text="Clear" />
+               </children>
+               <padding>
+                  <Insets top="10.0" />
+               </padding>
+            </HBox>
+         </children>
+      </GridPane>
+   </center>
+</BorderPane>
