@@ -232,7 +232,7 @@ public class MainController {
         List<String> tags = new ArrayList<>();
 
         String question = questionField.getText();
-        String textContent = textContentArea.getText();
+        String textContent = textContentArea.getText().replaceAll("\n", "\\\\n");
         String source = answersArea.getText();
         answers.addAll(splitText(source));
         String shorthand = shorthandsField.getText();
@@ -244,7 +244,7 @@ public class MainController {
                 }
             }
         }
-        String details = detailsArea.getText();
+        String details = detailsArea.getText().replaceAll("\n", "\\\\n");
         String submitter = submitterField.getText();
         if (manualTagsBox.isVisible()) {
             String tagsValue = tagsInputArea.getText();
