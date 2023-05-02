@@ -1,3 +1,7 @@
+# PromptMaker
+
+Tool to help on making contributing to popsauce easy and fast.
+
 ## Installation
 
 Extract the zip
