@@ -21,7 +21,7 @@ launcher
 ```
 
 ## How to use
-![example](https://github.com/9jiro/promptmaker/blob/main/example/example.png)
+![example](https://github.com/dennabetse/promptmaker/blob/main/example/example.png)
 
 | Parameter       | Description                                                                                |
 | :-------------- | :----------------------------------------------------------------------------------------- |
