@@ -25,14 +25,16 @@ launcher
 
 | Parameter       | Description                                                                                |
 | :-------------- | :----------------------------------------------------------------------------------------- |
-| filename        | By default file(s) are named from the first answer you typed in the answer area.              |
-| custom filename | In most cases custom filename is unneeded but is a special case i.e for prompts asking to complete lyrics or characters from movies/series where you have to set the filename from their sources.                                                               |
+| filename        | By default file(s) are named from the first answer you typed in the answer area.           |
+| Custom filename | In most cases custom filename is unneeded. Example of use case is for prompts asking to complete lyrics or characters from movies/series where you have to set the source as filename. |
 | Image selection | Copy and set the image name the same as the generated json.                                |
 | Resize          | **\*\*experimental\*\*** it might be better to use other way to resize your image.         |
 | Text content    | For text type prompt (i.e quotes, lyrics)                                                  |
 | Answers         | Answer(s) should be typed each on a **separate line**.                                     |
 | Shorts          | shorthand if added should be **separated by a comma** "**,**"                              |
 | Manual tags     | If new tags are ever added or some are missing, you can manually enter them.               |
+
+If no image has been selected, the program only generate a json file.
 
 ## Sample output
 
@@ -47,7 +49,7 @@ Image prompt
     "Le Roi"
   ],
   "shorthand": [],
-  "details": "w/e fit your description",
+  "details": "w/e fit your description (can let this field empty)",
   "submitter": "test",
   "tags": [
     "Mainstream",
@@ -61,12 +63,12 @@ Text prompt
 ```json
 {
   "prompt": "What movie is this taken from?",
-  "text": "i.e random quote or song lyrics",
+  "text": "i.e random quote or song lyrics. To add a line break use \n",
   "source": [
     "w/e movie name"
   ],
   "shorthand": [],
-  "details": "w/e fit your description",
+  "details": "",
   "submitter": "test",
   "tags": [
     "Mainstream",
