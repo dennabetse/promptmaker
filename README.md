@@ -20,7 +20,7 @@ In terminal
 launcher
 ```
 
-## How to use
+## Usage
 ![example](https://github.com/wlalswjd/promptmaker/blob/main/example/example.png)
 
 | Parameter       | Description                                                                                |
@@ -36,7 +36,7 @@ launcher
 
 If no image has been selected, the program only generate a json file.
 
-## Sample output
+## Example output
 
 Image prompt
 
@@ -45,8 +45,7 @@ Image prompt
   "prompt": "What movie is this image from?",
   "text": null,
   "source": [
-    "The King",
-    "Le Roi"
+    "movie name"
   ],
   "shorthand": [],
   "details": "w/e fit your description (can let this field empty)",
@@ -62,8 +61,8 @@ Image prompt
 Text prompt
 ```json
 {
-  "prompt": "What movie is this taken from?",
-  "text": "i.e random quote or song lyrics. To add a line break use \n",
+  "prompt": "What movie is this quote from?",
+  "text": "i.e random quote or song lyrics.",
   "source": [
     "w/e movie name"
   ],
