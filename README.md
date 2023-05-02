@@ -61,7 +61,7 @@ Text prompt
 ```json
 {
   "prompt": "What movie is this taken from?",
-  "text": "Here your quote",
+  "text": "i.e random quote or song lyrics",
   "source": [
     "w/e movie name"
   ],
@@ -74,4 +74,12 @@ Text prompt
     "Movies"
   ]
 }
+```
+
+## Compiling
+
+To compile the project yourself you will need to use modular jar for the used libraries. They have been added in the modular folder of the repo.
+
+```bash
+mvn clean javafx:jlink
 ```
