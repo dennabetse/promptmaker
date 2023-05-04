@@ -2,7 +2,7 @@
 
 Tool to make contributing to popsauce easy.
 
-Outil qui devrait permettre de faciliter la création de questions pour popsauce.
+Outil pour permettre de faciliter la création de questions pour popsauce.
 
 ## Installation
 
@@ -86,7 +86,7 @@ Text prompt
 
 ## Compiling
 
-To compile the project yourself you will need to use modular jar for the used libraries. They have been added in the modular folder of the repo.
+To compile the project by yourself you will need to make the dependencies used in the project to be modular. I provide the one i made in the modular folder.
 
 ```bash
 mvn clean javafx:jlink
