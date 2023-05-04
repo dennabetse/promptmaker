@@ -1,13 +1,17 @@
 package com.este.promptmaker;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.stage.FileChooser;
-import org.apache.commons.io.FilenameUtils;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
-import java.io.File;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -16,7 +20,7 @@ import java.util.List;
 public class MainController {
 
     @FXML
-    private ChoiceBox promptType;
+    private ChoiceBox<String> promptType;
     @FXML
     private CheckBox customFilename;
     @FXML
@@ -49,13 +53,15 @@ public class MainController {
     private VBox automatedTagsBox;
     @FXML
     private VBox tagsListBox;
+    @FXML
+    private Button unloadImageButton;
     private List<String> englishTags;
     private List<String> frenchTags;
     private List<String> germanTags;
     private List<String> hungarianTags;
     private List<String> spanishTags;
     private List<CheckBox> checkboxes;
-    private File selectedFile;
+    private ImageManipulator image;
 
     public void initialize() {
         englishTags = readFile("tags-en.txt");
@@ -67,12 +73,54 @@ public class MainController {
         checkboxes = new ArrayList<>();
 
         promptType.getItems().addAll("image", "text");
-        promptType.setValue("image");
+        promptType.getSelectionModel().selectFirst();
+
+        image = new ImageManipulator();
 
         englishTags();
     }
 
-    private List<String> readFile(String file) {
+    private PromptMaker promptContent() {
+        PromptMaker promptContent = new PromptMaker();
+
+        List<String> shorthands = new ArrayList<>();
+        List<String> tags = new ArrayList<>();
+
+        String question = questionField.getText();
+        String textContent = textContentArea.getText().replaceAll("\n", "\\\\n");
+        String source = answersArea.getText();
+        List<String> answers = new ArrayList<>(splitText(source));
+        String shorthand = shorthandsField.getText();
+        if (!shorthand.isEmpty()) {
+            String[] sSplit = shorthand.split(",");
+            for (String shorts : sSplit) {
+                if (!shorts.isBlank()) {
+                    shorthands.add(shorts.trim());
+                }
+            }
+        }
+        String details = detailsArea.getText().replaceAll("\n", "\\\\n");
+        String submitter = submitterField.getText();
+        if (manualTagsBox.isVisible()) {
+            String tagsValue = tagsInputArea.getText();
+            tags.addAll(splitText(tagsValue));
+        } else {
+            for (CheckBox checkbox : checkboxes) {
+                if (checkbox.isSelected()) {
+                    tags.add(checkbox.getText());
+                }
+            }
+        }
+
+        if (promptType.getValue().equals("image")) {
+            return new PromptMaker(question, answers, shorthands, details, submitter, tags);
+        } else if (promptType.getValue().equals("text")) {
+            return new PromptMaker(question, textContent, answers, shorthands, details, submitter, tags);
+        }
+        return promptContent;
+    }
+
+    private static List<String> readFile(String file) {
         List<String> rows = new ArrayList<>();
         try {
             Files.lines(Paths.get("config/" + file)).forEach(rows::add);
@@ -170,16 +218,28 @@ public class MainController {
     }
 
     @FXML
+    protected void outputFolderView() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("folder-view.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        Stage stage = new Stage();
+        stage.setResizable(false);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.initStyle(StageStyle.UTILITY);
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    @FXML
     protected void about() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("About");
-        alert.setHeaderText("PromptMaker version 0.1");
+        alert.setHeaderText("PromptMaker version 0.2");
         alert.setContentText("add king#4718 on discord if you have any question");
         alert.show();
     }
 
     @FXML
-    private void promptType() {
+    protected void promptType() {
         if (promptType.getValue().equals("image")) {
             imageTypeBox.setVisible(true);
             textTypeBox.setVisible(false);
@@ -187,13 +247,12 @@ public class MainController {
         } else {
             textTypeBox.setVisible(true);
             imageTypeBox.setVisible(false);
-            selectedImagePath.setText("...");
-            resizeImage.setSelected(false);
+            unloadImage();
         }
     }
 
     @FXML
-    private void customFilename() {
+    protected void customFilename() {
         if (customFilename.isSelected())
             filenameField.setVisible(true);
         else {
@@ -203,91 +262,66 @@ public class MainController {
     }
 
     @FXML
-    protected void selectImage() {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setInitialDirectory(new File("../"));
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("Any image", "*.png", "*.jpg", "*.svg"),
-                new FileChooser.ExtensionFilter("PNG", "*.png"),
-                new FileChooser.ExtensionFilter("JPG", "*.jpg"),
-                new FileChooser.ExtensionFilter("SVG", "*.svg")
-        );
-        selectedFile = fileChooser.showOpenDialog(null);
-        if (selectedFile != null) {
-            selectedImagePath.setText(selectedFile.getName());
+    protected void selectImage() throws IOException {
+        image.imageChooser();
+        if (image.getPath() != null) {
+            selectedImagePath.setText(image.getPath());
+            unloadImageButton.setVisible(true);
         }
     }
 
     @FXML
-    private void reset() {
+    protected void reset() {
         clearCheckboxes();
     }
 
     @FXML
-    protected void generateJson() {
-        PromptMaker promptContent = new PromptMaker();
-
-        List<String> answers = new ArrayList<>();
-        List<String> shorthands = new ArrayList<>();
-        List<String> tags = new ArrayList<>();
-
-        String question = questionField.getText();
-        String textContent = textContentArea.getText().replaceAll("\n", "\\\\n");
-        String source = answersArea.getText();
-        answers.addAll(splitText(source));
-        String shorthand = shorthandsField.getText();
-        if (!shorthand.isEmpty()) {
-            String[] sSplit = shorthand.split(",");
-            for (String shorts : sSplit) {
-                if (!shorts.isBlank()) {
-                    shorthands.add(shorts.trim());
-                }
+    protected void generateJson() throws IOException {
+        FolderChooser fc = new FolderChooser();
+        if (fc.getPath().isEmpty()) {
+            fc.chooseDirectory();
+            if (fc.getPath().isEmpty()) {
+                System.out.println("-----------------------------------------------\nCanceled.\n-----------------------------------------------\n");
+                return;
             }
-        }
-        String details = detailsArea.getText().replaceAll("\n", "\\\\n");
-        String submitter = submitterField.getText();
-        if (manualTagsBox.isVisible()) {
-            String tagsValue = tagsInputArea.getText();
-            tags.addAll(splitText(tagsValue));
-        } else {
-            for (CheckBox checkbox : checkboxes) {
-                if (checkbox.isSelected()) {
-                    tags.add(checkbox.getText());
-                }
-            }
+            fc.savePath();
         }
 
-        if (promptType.getValue().equals("image")) {
-            promptContent = new PromptMaker(question, answers, shorthands, details, submitter, tags);
-        } else if (promptType.getValue().equals("text")) {
-            promptContent = new PromptMaker(question, textContent, answers, shorthands, details, submitter, tags);
-        }
+        PromptMaker promptContent = promptContent();
 
         String fileContent = promptContent.save();
         System.out.println(fileContent);
+        System.out.println();
 
         String fileName = "";
 
-        if (!answers.isEmpty()) {
-            fileName = answers.get(0);
+        if (!promptContent.getSources().isEmpty()) {
+            fileName = promptContent.getSources().get(0);
         }
 
         if (customFilename.isSelected()) {
             fileName = filenameField.getText();
         }
 
-        try {
-            if (!selectedImagePath.getText().equals("...")) {
-                String ext = FilenameUtils.getExtension(selectedFile.getName());
-                Boolean checked = resizeImage.isSelected();
-
-                promptContent.createFile(fileName, fileContent, selectedFile, ext, checked);
+        FileMaker fm = new FileMaker();
+        fm.writeToFile(fileName, fileContent);
+        if (!selectedImagePath.getText().equals("...")) {
+            if (resizeImage.isSelected()) {
+                BufferedImage bi = image.resizeImage();
+                if (bi != null) {
+                    fm.copyResizedImage(bi, image.getExt());
+                    System.out.println("Image has been resized.\n");
+                } else {
+                    fm.copyImage(image.getSelectedFile(), image.getExt());
+                    System.out.println("Resize failed. Image has been copied without any change.\n");
+                }
             } else {
-                promptContent.createFile(fileName, fileContent);
+                fm.copyImage(image.getSelectedFile(), image.getExt());
+                System.out.println("Image copied.\n");
             }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
         }
+
+        System.out.println("Output folder:\n\"" + fc.getPath() + "\"\n\n-----------------------------------------------\n");
     }
 
     @FXML
@@ -296,8 +330,7 @@ public class MainController {
         filenameField.setVisible(false);
         filenameField.clear();
         questionField.clear();
-        selectedImagePath.setText("...");
-        resizeImage.setSelected(false);
+        unloadImage();
         textContentArea.clear();
         answersArea.clear();
         shorthandsField.clear();
@@ -308,8 +341,9 @@ public class MainController {
     }
 
     @FXML
-    private void unloadImage() {
+    protected void unloadImage() {
         selectedImagePath.setText("...");
         resizeImage.setSelected(false);
+        unloadImageButton.setVisible(false);
     }
 }
