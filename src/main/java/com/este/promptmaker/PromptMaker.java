@@ -3,6 +3,7 @@ package com.este.promptmaker;
 import java.util.List;
 
 public class PromptMaker {
+
     private String prompt;
     private String text;
     private List<String> sources;

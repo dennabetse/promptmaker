@@ -20,10 +20,6 @@ public class FileMaker {
         fc = new FolderChooser();
     }
 
-    private File imageFile(String ext) {
-        return new File(fc.getPath() + "/" + filename + "." + ext);
-    }
-
     private String toCamelCase(String name) {
         if (name.isEmpty()) {
             name = "untitled";
@@ -40,7 +36,7 @@ public class FileMaker {
         String convertedName = toCamelCase(name);
 
         int num = 1;
-        filename = convertedName;
+        filename = convertedName + "_" + num;
         File file = new File(fc.getPath() + "/" + filename + ".json");
         file.getParentFile().mkdirs();
         while (file.exists()) {
@@ -54,6 +50,10 @@ public class FileMaker {
         PrintWriter writer = new PrintWriter(fc.getPath() + "/" + filename + ".json", StandardCharsets.UTF_8);
         writer.println(text);
         writer.close();
+    }
+
+    private File imageFile(String ext) {
+        return new File(fc.getPath() + "/" + filename + "." + ext);
     }
 
     public void copyImage(File file, String ext) throws IOException {
