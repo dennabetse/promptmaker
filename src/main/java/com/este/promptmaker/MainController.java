@@ -190,7 +190,9 @@ public class MainController {
         stage.initOwner(primaryStage());
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setScene(scene);
-        stage.show();
+        stage.showAndWait();
+        tags = new TagReader();
+        englishTags();
     }
 
     @FXML
