@@ -23,13 +23,12 @@ public class FolderChooser {
 
     private String readFile() throws IOException {
         try (Scanner scanner = new Scanner(Paths.get("settings.ini"))) {
-            while (scanner.hasNextLine()) {
-                String line = scanner.nextLine();
-                return line;
-            }
+            return scanner.nextLine();
         } catch (Exception e) {
             File settings = new File("settings.ini");
-            settings.createNewFile();
+            if (settings.createNewFile()) {
+                System.out.println();
+            }
         }
         return "";
     }

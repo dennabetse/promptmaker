@@ -27,7 +27,6 @@ public class PromptMaker {
         this.details = detail;
         this.submitter = submitter;
         this.tags = tags;
-        this.text = null;
     }
 
     public String getPrompt() {
@@ -58,10 +57,22 @@ public class PromptMaker {
         return tags;
     }
 
-    public String printText() {
-        if (getText() == null) {
-            return null;
+    private String append(List<String> list) {
+        StringBuilder sb = new StringBuilder();
+        int cnt = 1;
+        for (String s : list) {
+            sb.append("\"");
+            sb.append(s);
+            sb.append("\"");
+            if (cnt < list.size()) {
+                sb.append(",\n    ");
+            }
+            cnt++;
         }
+        return sb.toString();
+    }
+
+    public String printText() {
         return "\"" + getText() + "\"";
     }
 
@@ -69,33 +80,16 @@ public class PromptMaker {
         if (list.isEmpty()) {
             return "\"\"";
         }
-        String string = "";
-        int cnt = 1;
-        for (String s : list) {
-            string += "\"" + s + "\"";
-            if (cnt < list.size()) {
-                string += ",\n    ";
-            }
-            cnt++;
-        }
-        return string;
+
+        return append(list);
     }
 
     public String printShorthand() {
         if (getShorthands().isEmpty()) {
             return "[]";
         }
-        String string = "[\n    ";
-        int cnt = 1;
-        for (String s : getShorthands()) {
-            string += "\"" + s + "\"";
-            if (cnt < getShorthands().size()) {
-                string += ",\n    ";
-            }
-            cnt++;
-        }
-        string += "\n  ]";
-        return string;
+
+        return "[\n    " + append(getShorthands()) + "\n  ]";
     }
 
     public String save() {

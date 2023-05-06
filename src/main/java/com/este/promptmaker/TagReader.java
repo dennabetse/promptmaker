@@ -4,14 +4,15 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class TagReader {
 
-    private List<String> english;
-    private List<String> french;
-    private List<String> german;
-    private List<String> hungarian;
-    private List<String> spanish;
+    private final List<String> english;
+    private final List<String> french;
+    private final List<String> german;
+    private final List<String> hungarian;
+    private final List<String> spanish;
 
     public TagReader() {
         english = readFile("tags-en.txt");
@@ -23,9 +24,8 @@ public class TagReader {
 
     private static List<String> readFile(String file) {
         List<String> rows = new ArrayList<>();
-        try {
-            Files.lines(Paths.get("config/" + file))
-                    .filter(row -> !row.isEmpty())
+        try (Stream<String> line = Files.lines(Paths.get("config/" + file))) {
+            line.filter(row -> !row.isEmpty())
                     .forEach(row -> rows.add(row.trim()));
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
@@ -54,12 +54,13 @@ public class TagReader {
     }
 
     public String printTags(List<String> list) {
-        String tags = "";
+        StringBuilder tags = new StringBuilder();
         for (String tag : list) {
             if (!tag.isEmpty()) {
-                tags += tag + "\n";
+                tags.append(tag);
+                tags.append("\n");
             }
         }
-        return tags;
+        return tags.toString();
     }
 }

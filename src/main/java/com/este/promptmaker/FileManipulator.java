@@ -13,7 +13,7 @@ import java.text.Normalizer;
 
 public class FileManipulator {
 
-    private FolderChooser fc;
+    private final FolderChooser fc;
     private String filename;
 
     public FileManipulator() throws IOException {
@@ -38,7 +38,9 @@ public class FileManipulator {
         int num = 1;
         filename = convertedName + "_" + num;
         File file = new File(fc.getPath() + "/" + filename + ".json");
-        file.getParentFile().mkdirs();
+        if(file.getParentFile().mkdirs()){
+            System.out.println();
+        }
         while (file.exists()) {
             filename = convertedName + "_" + (num++);
             file = new File(fc.getPath() + "/" + filename + ".json");
@@ -59,7 +61,9 @@ public class FileManipulator {
     public void saveTags(String languageFile, String text) throws IOException {
         String pathname = "config/" + languageFile;
         File file = new File(pathname);
-        file.getParentFile().mkdirs();
+        if(file.getParentFile().mkdirs()){
+            System.out.println();
+        }
         writeToFile(pathname, text);
     }
 

@@ -76,8 +76,7 @@ public class TagEditorController {
         alert.setContentText("Confirm change(s)?");
 
         Optional<ButtonType> option = alert.showAndWait();
-
-        if (option.get() == ButtonType.OK) {
+        if (option.orElse(null) == ButtonType.OK) {
             confirmSave();
             close();
         }
