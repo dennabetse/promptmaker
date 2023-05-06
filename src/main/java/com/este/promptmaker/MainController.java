@@ -108,6 +108,44 @@ public class MainController {
         return promptContent;
     }
 
+    private boolean missingField(PromptMaker promptContent) {
+        boolean empty = false;
+
+        if (promptContent.getPrompt().isEmpty()) {
+            System.out.println("Missing question.");
+            empty = true;
+        }
+        if (promptType.getValue().equals("text") && promptContent.getText().isEmpty()) {
+            System.out.println("Missing text.");
+            empty = true;
+        }
+        if (promptContent.getSources().isEmpty()) {
+            System.out.println("Missing answer(s).");
+            empty = true;
+        }
+        if (promptContent.getTags().isEmpty()) {
+            System.out.println("Missing tags.");
+            empty = true;
+        }
+        System.out.println();
+
+        return empty;
+    }
+
+    private Stage primaryStage() {
+        return (Stage) mainView.getScene().getWindow();
+    }
+
+    private Stage newStage(FXMLLoader fxmlLoader) throws IOException {
+        Scene scene = new Scene(fxmlLoader.load());
+        Stage stage = new Stage();
+        stage.setResizable(false);
+        stage.initOwner(primaryStage());
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setScene(scene);
+        return stage;
+    }
+
     private void setTags(List<String> list) {
         removeCheckboxes();
         createCheckboxes(list);
@@ -152,10 +190,6 @@ public class MainController {
         return list;
     }
 
-    private Stage primaryStage() {
-        return (Stage) mainView.getScene().getWindow();
-    }
-
     @FXML
     protected void englishTags() {
         setTags(tags.getEnglish());
@@ -184,12 +218,7 @@ public class MainController {
     @FXML
     protected void editTagsView() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("tags-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
-        Stage stage = new Stage();
-        stage.setResizable(false);
-        stage.initOwner(primaryStage());
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.setScene(scene);
+        Stage stage = newStage(fxmlLoader);
         stage.showAndWait();
         tags = new TagReader();
         englishTags();
@@ -212,12 +241,7 @@ public class MainController {
     @FXML
     protected void outputFolderView() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("folder-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
-        Stage stage = new Stage();
-        stage.setResizable(false);
-        stage.initOwner(primaryStage());
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.setScene(scene);
+        Stage stage = newStage(fxmlLoader);
         stage.show();
     }
 
@@ -227,7 +251,7 @@ public class MainController {
         alert.initOwner(primaryStage());
         alert.setTitle("About");
         alert.setHeaderText("PromptMaker");
-        alert.setContentText("Version 0.3\n© este. All rights reserved.");
+        alert.setContentText("Version 0.3.1\n© este. All rights reserved.");
         alert.show();
     }
 
@@ -281,17 +305,16 @@ public class MainController {
         }
 
         PromptMaker promptContent = promptContent();
+        if (missingField(promptContent)) {
+            System.out.println("-----------------------------------------------\nCanceled.\n-----------------------------------------------\n");
+            return;
+        }
 
         String fileContent = promptContent.save();
         System.out.println(fileContent);
         System.out.println();
 
-        String fileName = "";
-
-        if (!promptContent.getSources().isEmpty()) {
-            fileName = promptContent.getSources().get(0);
-        }
-
+        String fileName = promptContent.getSources().get(0);
         if (customFilename.isSelected()) {
             fileName = filenameField.getText();
         }

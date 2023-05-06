@@ -14,7 +14,7 @@ public class MainApplication extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("main-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         stage.getIcons().add(new Image("sparklinlabs.png"));
-        stage.setTitle("PromptMaker v0.3");
+        stage.setTitle("PromptMaker v0.3.1");
         stage.setScene(scene);
         stage.setMinHeight(728);
         stage.setMinWidth(512);
