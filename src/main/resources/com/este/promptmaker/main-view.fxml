@@ -19,7 +19,7 @@
 <?import javafx.scene.layout.VBox?>
 
 <?import javafx.scene.control.SeparatorMenuItem?>
-<BorderPane prefHeight="728.0" prefWidth="512.0" xmlns:fx="http://javafx.com/fxml/1"
+<BorderPane fx:id="mainView" prefHeight="728.0" prefWidth="512.0" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.este.promptmaker.MainController">
     <top>
         <MenuBar BorderPane.alignment="CENTER">
@@ -34,6 +34,7 @@
                 <MenuItem mnemonicParsing="false" onAction="#automatedInput" text="Automated input"/>
                 <MenuItem mnemonicParsing="false" onAction="#manualInput" text="Manual input"/>
                 <SeparatorMenuItem mnemonicParsing="false"/>
+                <MenuItem mnemonicParsing="false" onAction="#editTagsView" text="Edit tags"/>
                 <MenuItem mnemonicParsing="false" onAction="#outputFolderView" text="Output Folder"/>
             </Menu>
             <Menu mnemonicParsing="false" text="Help">

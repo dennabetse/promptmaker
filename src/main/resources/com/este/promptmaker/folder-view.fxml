@@ -12,7 +12,7 @@
 
 <BorderPane fx:id="folderView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
             prefHeight="150.0"
-            prefWidth="350.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.este.promptmaker.FolderController">
+            prefWidth="350.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.este.promptmaker.OutputFolderController">
     <center>
         <GridPane BorderPane.alignment="CENTER">
             <columnConstraints>
@@ -25,7 +25,7 @@
             </rowConstraints>
             <Label text="Output folder"/>
             <HBox prefHeight="100.0" prefWidth="200.0" spacing="5.0" GridPane.rowIndex="1">
-                <Button mnemonicParsing="false" onAction="#folderButton" text="📁"/>
+                <Button mnemonicParsing="false" onAction="#folder" text="📁"/>
                 <TextField fx:id="folderOutputField" editable="false" HBox.hgrow="ALWAYS"/>
             </HBox>
             <GridPane hgap="5.0" GridPane.rowIndex="2">
@@ -36,8 +36,8 @@
                 <rowConstraints>
                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
                 </rowConstraints>
-                <Button mnemonicParsing="false" onAction="#confirmButton" text="Confirm" GridPane.halignment="RIGHT"/>
-                <Button mnemonicParsing="false" onAction="#cancelButton" text="Cancel" GridPane.columnIndex="1"/>
+                <Button mnemonicParsing="false" onAction="#confirm" text="Confirm" GridPane.halignment="RIGHT"/>
+                <Button mnemonicParsing="false" onAction="#cancel" text="Cancel" GridPane.columnIndex="1"/>
             </GridPane>
             <padding>
                 <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>

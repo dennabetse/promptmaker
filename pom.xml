@@ -77,7 +77,7 @@
                         <configuration>
                             <mainClass>com.este.promptmaker/com.este.promptmaker.MainApplication</mainClass>
                             <launcher>launcher</launcher>
-                            <jlinkZipName>PromptMaker v0.2</jlinkZipName>
+                            <jlinkZipName>PromptMaker v0.3</jlinkZipName>
                             <jlinkImageName>PromptMaker</jlinkImageName>
                             <noManPages>true</noManPages>
                             <stripDebug>true</stripDebug>

@@ -4,21 +4,21 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainController {
 
+    @FXML
+    private BorderPane mainView;
     @FXML
     private ChoiceBox<String> promptType;
     @FXML
@@ -55,28 +55,16 @@ public class MainController {
     private VBox tagsListBox;
     @FXML
     private Button unloadImageButton;
-    private List<String> englishTags;
-    private List<String> frenchTags;
-    private List<String> germanTags;
-    private List<String> hungarianTags;
-    private List<String> spanishTags;
+    private TagsReader tags;
     private List<CheckBox> checkboxes;
     private ImageManipulator image;
 
     public void initialize() {
-        englishTags = readFile("tags-en.txt");
-        frenchTags = readFile("tags-fr.txt");
-        germanTags = readFile("tags-de.txt");
-        hungarianTags = readFile("tags-hu.txt");
-        spanishTags = readFile("tags-es.txt");
-
+        tags = new TagsReader();
         checkboxes = new ArrayList<>();
-
         promptType.getItems().addAll("image", "text");
         promptType.getSelectionModel().selectFirst();
-
         image = new ImageManipulator();
-
         englishTags();
     }
 
@@ -120,14 +108,10 @@ public class MainController {
         return promptContent;
     }
 
-    private static List<String> readFile(String file) {
-        List<String> rows = new ArrayList<>();
-        try {
-            Files.lines(Paths.get("config/" + file)).forEach(rows::add);
-        } catch (Exception e) {
-            System.out.println("Error: " + e.getMessage());
-        }
-        return rows;
+    private void setTags(List<String> list) {
+        removeCheckboxes();
+        createCheckboxes(list);
+        addCheckboxes();
     }
 
     private void createCheckboxes(List<String> tags) {
@@ -143,9 +127,9 @@ public class MainController {
     }
 
     private void clearCheckboxes() {
-        for (CheckBox c : checkboxes) {
-            if (c.isSelected()) {
-                c.setSelected(false);
+        for (CheckBox checkbox : checkboxes) {
+            if (checkbox.isSelected()) {
+                checkbox.setSelected(false);
             }
         }
     }
@@ -168,39 +152,45 @@ public class MainController {
         return list;
     }
 
+    private Stage primaryStage() {
+        return (Stage) mainView.getScene().getWindow();
+    }
+
     @FXML
     protected void englishTags() {
-        removeCheckboxes();
-        createCheckboxes(englishTags);
-        addCheckboxes();
+        setTags(tags.getEnglish());
     }
 
     @FXML
     protected void frenchTags() {
-        removeCheckboxes();
-        createCheckboxes(frenchTags);
-        addCheckboxes();
+        setTags(tags.getFrench());
     }
 
     @FXML
     protected void germanTags() {
-        removeCheckboxes();
-        createCheckboxes(germanTags);
-        addCheckboxes();
+        setTags(tags.getGerman());
     }
 
     @FXML
     protected void hungarianTags() {
-        removeCheckboxes();
-        createCheckboxes(hungarianTags);
-        addCheckboxes();
+        setTags(tags.getHungarian());
     }
 
     @FXML
     protected void spanishTags() {
-        removeCheckboxes();
-        createCheckboxes(spanishTags);
-        addCheckboxes();
+        setTags(tags.getSpanish());
+    }
+
+    @FXML
+    protected void editTagsView() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("tags-view.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        Stage stage = new Stage();
+        stage.setResizable(false);
+        stage.initOwner(primaryStage());
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setScene(scene);
+        stage.show();
     }
 
     @FXML
@@ -223,8 +213,8 @@ public class MainController {
         Scene scene = new Scene(fxmlLoader.load());
         Stage stage = new Stage();
         stage.setResizable(false);
+        stage.initOwner(primaryStage());
         stage.initModality(Modality.APPLICATION_MODAL);
-        stage.initStyle(StageStyle.UTILITY);
         stage.setScene(scene);
         stage.show();
     }
@@ -232,9 +222,10 @@ public class MainController {
     @FXML
     protected void about() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.initOwner(primaryStage());
         alert.setTitle("About");
-        alert.setHeaderText("PromptMaker version 0.2");
-        alert.setContentText("add king#4718 on discord if you have any question");
+        alert.setHeaderText("PromptMaker");
+        alert.setContentText("Version 0.3\n© este. All rights reserved.");
         alert.show();
     }
 
@@ -303,8 +294,8 @@ public class MainController {
             fileName = filenameField.getText();
         }
 
-        FileMaker fm = new FileMaker();
-        fm.writeToFile(fileName, fileContent);
+        FileManipulator fm = new FileManipulator();
+        fm.makeJson(fileName, fileContent);
         if (!selectedImagePath.getText().equals("...")) {
             if (resizeImage.isSelected()) {
                 BufferedImage bi = image.resizeImage();

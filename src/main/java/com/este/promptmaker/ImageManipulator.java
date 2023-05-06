@@ -12,10 +12,10 @@ import java.io.IOException;
 public class ImageManipulator {
 
     private File selectedFile;
-    private String path;
+    private String pathname;
 
     public String getPath() {
-        return path;
+        return pathname;
     }
 
     public String getExt() {
@@ -37,13 +37,13 @@ public class ImageManipulator {
         );
         selectedFile = fileChooser.showOpenDialog(null);
         if (selectedFile != null) {
-            path = selectedFile.getCanonicalPath();
+            pathname = selectedFile.getCanonicalPath();
         }
     }
 
     // still a work in progress
     public BufferedImage resizeImage() throws IOException {
-        BufferedImage bi = ImageIO.read(new File(path));
+        BufferedImage bi = ImageIO.read(new File(pathname));
         if (!(bi == null)) {
             bi = simpleResizeImage(bi, 1024);
             return bi;
