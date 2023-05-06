@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 
 <BorderPane fx:id="editTagsView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-            prefHeight="200.0" prefWidth="350.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.este.promptmaker.TagsViewController">
+            prefHeight="200.0" prefWidth="350.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.este.promptmaker.TagEditorController">
     <top>
         <ChoiceBox fx:id="tagsLanguage" prefWidth="93.0" BorderPane.alignment="CENTER" onAction="#language">
             <BorderPane.margin>

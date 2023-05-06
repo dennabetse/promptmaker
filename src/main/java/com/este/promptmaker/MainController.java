@@ -55,12 +55,12 @@ public class MainController {
     private VBox tagsListBox;
     @FXML
     private Button unloadImageButton;
-    private TagsReader tags;
+    private TagReader tags;
     private List<CheckBox> checkboxes;
     private ImageManipulator image;
 
     public void initialize() {
-        tags = new TagsReader();
+        tags = new TagReader();
         checkboxes = new ArrayList<>();
         promptType.getItems().addAll("image", "text");
         promptType.getSelectionModel().selectFirst();
