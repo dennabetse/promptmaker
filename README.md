@@ -33,8 +33,7 @@ launcher
 | Text content    | For text type prompt (i.e quotes, lyrics)                                                  |
 | Answer(s)       | Answer(s) should be typed each on a **separate line**.                                     |
 | Short(s)        | Shorthand(s) if added should be **separated by a comma** "**,**"                           |
-| Automated tags  | Self explanatory. If new tags are ever added or some are missing for a specific language you can also add them to the text files located in the config folder. |
-| Manual tags     | If there are missing tags, know that you can manually enter them. |
+| Tag editor      | If tags are missing for automated input you can edit them or choose to use manual input.   |
 
 If no image has been selected, the program only generate a json file.
 
@@ -83,10 +82,12 @@ Text prompt
 
 - resizer (still a work in progress)
 - add localization (maybe)
+- add image viewer (maybe)
+- save settings
 
 ## Compiling
 
-To compile the project by yourself you will need to make the dependencies used in the project to be modular. I provide the one i made in the modular folder.
+To compile the project by yourself you will need to make the dependencies used to be modular. I provide the one i made in the modular folder.
 
 ```bash
 mvn clean javafx:jlink
