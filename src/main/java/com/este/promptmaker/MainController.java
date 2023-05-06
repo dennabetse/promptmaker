@@ -127,7 +127,6 @@ public class MainController {
             System.out.println("Missing tags.");
             empty = true;
         }
-        System.out.println();
 
         return empty;
     }
@@ -306,7 +305,7 @@ public class MainController {
 
         PromptMaker promptContent = promptContent();
         if (missingField(promptContent)) {
-            System.out.println("-----------------------------------------------\nCanceled.\n-----------------------------------------------\n");
+            System.out.println("\n-----------------------------------------------\nCanceled.\n-----------------------------------------------\n");
             return;
         }
 
