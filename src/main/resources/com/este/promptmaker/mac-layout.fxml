@@ -46,7 +46,7 @@
         <GridPane vgap="5.0" BorderPane.alignment="CENTER">
             <HBox spacing="10.0">
                 <Label text="Type of Prompt:" />
-                <ChoiceBox fx:id="promptType" minWidth="66" onAction="#promptType" />
+                <ChoiceBox fx:id="promptType" minWidth="70" onAction="#promptType" />
                 <CheckBox fx:id="customFilename" mnemonicParsing="false" onAction="#customFilename" text="Custom Filename" />
                 <TextField fx:id="filenameField" visible="false" HBox.hgrow="SOMETIMES" />
             </HBox>
@@ -59,7 +59,7 @@
             <VBox fx:id="imageTypeBox" spacing="5.0" GridPane.rowIndex="3">
                 <Label text="Image" />
                 <HBox spacing="5.0" style="-fx-border-style: dashed;">
-                    <Button minWidth="77.0" mnemonicParsing="false" onAction="#selectImage" text="Choose File" />
+                    <Button minWidth="82.0" mnemonicParsing="false" onAction="#selectImage" text="Choose File" />
                     <Label fx:id="selectedImagePath" text="...">
                         <HBox.margin>
                             <Insets top="5.0" />

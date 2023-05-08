@@ -28,9 +28,11 @@ public class MainController {
     @FXML
     private TextField questionField;
     @FXML
-    private HBox imageTypeBox;
+    private VBox imageTypeBox;
     @FXML
     private Label selectedImagePath;
+    @FXML
+    private HBox resizeBox;
     @FXML
     private CheckBox resizeImage;
     @FXML
@@ -62,7 +64,7 @@ public class MainController {
     public void initialize() {
         tags = new TagReader();
         checkboxes = new ArrayList<>();
-        promptType.getItems().addAll("image", "text");
+        promptType.getItems().addAll("Image", "Text");
         promptType.getSelectionModel().selectFirst();
         image = new ImageManipulator();
         englishTags();
@@ -100,9 +102,9 @@ public class MainController {
             }
         }
 
-        if (promptType.getValue().equals("image")) {
+        if (promptType.getValue().equals("Image")) {
             return new PromptMaker(question, answers, shorthands, details, submitter, tags);
-        } else if (promptType.getValue().equals("text")) {
+        } else if (promptType.getValue().equals("Text")) {
             return new PromptMaker(question, textContent, answers, shorthands, details, submitter, tags);
         }
         return promptContent;
@@ -115,7 +117,7 @@ public class MainController {
             System.out.println("Missing question.");
             empty = true;
         }
-        if (promptType.getValue().equals("text") && promptContent.getText().isEmpty()) {
+        if (promptType.getValue().equals("Text") && promptContent.getText().isEmpty()) {
             System.out.println("Missing text.");
             empty = true;
         }
@@ -250,13 +252,13 @@ public class MainController {
         alert.initOwner(primaryStage());
         alert.setTitle("About");
         alert.setHeaderText("PromptMaker");
-        alert.setContentText("Version 0.3.1\n© este. All rights reserved.");
+        alert.setContentText("Version 0.3.2\n© este. All rights reserved.");
         alert.show();
     }
 
     @FXML
     protected void promptType() {
-        if (promptType.getValue().equals("image")) {
+        if (promptType.getValue().equals("Image")) {
             imageTypeBox.setVisible(true);
             textTypeBox.setVisible(false);
             textContentArea.clear();
@@ -282,6 +284,7 @@ public class MainController {
         image.imageChooser();
         if (image.getPath() != null) {
             selectedImagePath.setText(image.getPath());
+            resizeBox.setVisible(true);
             unloadImageButton.setVisible(true);
         }
     }
@@ -358,6 +361,7 @@ public class MainController {
     @FXML
     protected void unloadImage() {
         selectedImagePath.setText("...");
+        resizeBox.setVisible(false);
         resizeImage.setSelected(false);
         unloadImageButton.setVisible(false);
     }

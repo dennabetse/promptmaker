@@ -8,10 +8,10 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class MainApplication extends Application {
+public class MacMainApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("main-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(MacMainApplication.class.getResource("mac-layout.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         stage.getIcons().add(new Image("sparklinlabs.png"));
         stage.setTitle("PromptMaker");
