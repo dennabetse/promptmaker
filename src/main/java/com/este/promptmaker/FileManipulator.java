@@ -1,6 +1,7 @@
 package com.este.promptmaker;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.CaseUtils;
 
 import javax.imageio.ImageIO;
@@ -33,7 +34,8 @@ public class FileManipulator {
     }
 
     private void setFilename(String name) {
-        String convertedName = toCamelCase(name);
+        String shortenName = StringUtils.left(name, 123);
+        String convertedName = toCamelCase(shortenName);
 
         int num = 1;
         filename = convertedName + "_" + num;
@@ -41,7 +43,7 @@ public class FileManipulator {
         if(file.getParentFile().mkdirs()){
             System.out.println();
         }
-        while (file.exists()) {
+        while (file.exists() && num < 201) {
             filename = convertedName + "_" + (num++);
             file = new File(fc.getPath() + "/" + filename + ".json");
         }

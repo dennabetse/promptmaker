@@ -20,168 +20,207 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="mainView" prefHeight="696.0" prefWidth="560.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.este.promptmaker.MainController">
+<BorderPane fx:id="mainView" prefHeight="696.0" prefWidth="560.0" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.este.promptmaker.MainController">
     <top>
         <MenuBar BorderPane.alignment="CENTER">
             <Menu mnemonicParsing="false" text="Tags">
-                <MenuItem mnemonicParsing="false" onAction="#englishTags" text="English" />
-                <MenuItem mnemonicParsing="false" onAction="#frenchTags" text="French" />
-                <MenuItem mnemonicParsing="false" onAction="#germanTags" text="German" />
-                <MenuItem mnemonicParsing="false" onAction="#hungarianTags" text="Hungarian" />
-                <MenuItem mnemonicParsing="false" onAction="#spanishTags" text="Spanish" />
+                <MenuItem mnemonicParsing="false" onAction="#englishTags" text="English"/>
+                <MenuItem mnemonicParsing="false" onAction="#frenchTags" text="French"/>
+                <MenuItem mnemonicParsing="false" onAction="#germanTags" text="German"/>
+                <MenuItem mnemonicParsing="false" onAction="#hungarianTags" text="Hungarian"/>
+                <MenuItem mnemonicParsing="false" onAction="#spanishTags" text="Spanish"/>
             </Menu>
             <Menu mnemonicParsing="false" text="Settings">
-                <MenuItem mnemonicParsing="false" onAction="#automatedInput" text="Automated Input" />
-                <MenuItem mnemonicParsing="false" onAction="#manualInput" text="Manual Input" />
-                <SeparatorMenuItem mnemonicParsing="false" />
-                <MenuItem mnemonicParsing="false" onAction="#editTagsView" text="Edit Tags" />
-                <MenuItem mnemonicParsing="false" onAction="#outputFolderView" text="Folder Output" />
+                <MenuItem mnemonicParsing="false" onAction="#automatedInput" text="Automated Input"/>
+                <MenuItem mnemonicParsing="false" onAction="#manualInput" text="Manual Input"/>
+                <SeparatorMenuItem mnemonicParsing="false"/>
+                <MenuItem mnemonicParsing="false" onAction="#editTagsView" text="Edit Tags"/>
+                <MenuItem mnemonicParsing="false" onAction="#outputFolderView" text="Folder Output"/>
             </Menu>
             <Menu mnemonicParsing="false" text="Help">
-                <MenuItem mnemonicParsing="false" onAction="#about" text="About" />
+                <MenuItem mnemonicParsing="false" onAction="#about" text="About"/>
             </Menu>
         </MenuBar>
     </top>
     <center>
         <GridPane vgap="5.0" BorderPane.alignment="CENTER">
             <HBox spacing="10.0">
-                <Label text="Type of Prompt:" />
-                <ChoiceBox fx:id="promptType" minWidth="77" onAction="#promptType" />
-                <CheckBox fx:id="customFilename" mnemonicParsing="false" onAction="#customFilename" text="Custom Filename" />
-                <TextField fx:id="filenameField" visible="false" HBox.hgrow="SOMETIMES" />
+                <Label text="Type of Prompt:"/>
+                <ChoiceBox fx:id="promptType" minWidth="77" onAction="#promptType"/>
+                <CheckBox fx:id="customFilename" mnemonicParsing="false" onAction="#customFilename"
+                          text="Custom Filename"/>
+                <TextField fx:id="filenameField" visible="false" HBox.hgrow="SOMETIMES">
+                    <font>
+                        <Font size="13.0"/>
+                    </font>
+                </TextField>
             </HBox>
             <Label text="Type the Question" GridPane.rowIndex="1">
                 <GridPane.margin>
-                    <Insets top="10.0" />
+                    <Insets top="10.0"/>
                 </GridPane.margin>
             </Label>
-            <TextField fx:id="questionField" GridPane.rowIndex="2" />
+            <TextField fx:id="questionField" GridPane.rowIndex="2">
+                <font>
+                    <Font size="13.0"/>
+                </font>
+            </TextField>
             <VBox fx:id="imageTypeBox" spacing="5.0" GridPane.rowIndex="3">
-                <Label text="Image" />
+                <Label text="Image"/>
                 <HBox spacing="5.0" style="-fx-border-style: dashed;">
-                    <Button minWidth="93.0" mnemonicParsing="false" onAction="#selectImage" text="Choose File" />
+                    <Button minWidth="93.0" mnemonicParsing="false" onAction="#selectImage" text="Choose File"/>
                     <Label fx:id="selectedImagePath" text="...">
                         <HBox.margin>
-                            <Insets top="5.0" />
+                            <Insets top="5.0"/>
                         </HBox.margin>
                     </Label>
                     <VBox.margin>
-                        <Insets />
+                        <Insets/>
                     </VBox.margin>
-               <padding>
-                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-               </padding>
+                    <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                    </padding>
                 </HBox>
                 <HBox fx:id="resizeBox" visible="false">
-                    <CheckBox fx:id="resizeImage" mnemonicParsing="false" text="Resize image (experimental)" />
-               <VBox.margin>
-                  <Insets top="10.0" />
-               </VBox.margin>
+                    <CheckBox fx:id="resizeImage" mnemonicParsing="false" text="Resize image (experimental)"/>
+                    <VBox.margin>
+                        <Insets top="10.0"/>
+                    </VBox.margin>
                 </HBox>
                 <GridPane.margin>
-                    <Insets top="5.0" />
+                    <Insets top="5.0"/>
                 </GridPane.margin>
             </VBox>
             <VBox fx:id="textTypeBox" spacing="5.0" visible="false" GridPane.rowIndex="3">
-                <Label text="Text Content" />
-                <TextArea fx:id="textContentArea" />
+                <Label text="Text Content"/>
+                <TextArea fx:id="textContentArea">
+                    <font>
+                        <Font size="13.0"/>
+                    </font>
+                </TextArea>
                 <GridPane.margin>
-                    <Insets top="5.0" />
+                    <Insets top="5.0"/>
                 </GridPane.margin>
             </VBox>
             <Label text="Enter possible Answer(s) (each on a separate line)" GridPane.rowIndex="4">
                 <GridPane.margin>
-                    <Insets top="5.0" />
+                    <Insets top="5.0"/>
                 </GridPane.margin>
             </Label>
-            <TextArea fx:id="answersArea" GridPane.rowIndex="5" />
+            <TextArea fx:id="answersArea" GridPane.rowIndex="5">
+                <font>
+                    <Font size="13.0"/>
+                </font>
+            </TextArea>
             <Label text="Enter possible Short(s) (separated by a comma &quot;,&quot;) (optional)" GridPane.rowIndex="6">
                 <GridPane.margin>
-                    <Insets top="5.0" />
+                    <Insets top="5.0"/>
                 </GridPane.margin>
             </Label>
-            <TextField fx:id="shorthandsField" GridPane.rowIndex="7" />
+            <TextField fx:id="shorthandsField" GridPane.rowIndex="7">
+                <font>
+                    <Font size="13.0"/>
+                </font>
+            </TextField>
             <Label text="Description (optional)" GridPane.rowIndex="8">
                 <GridPane.margin>
-                    <Insets top="5.0" />
+                    <Insets top="5.0"/>
                 </GridPane.margin>
             </Label>
-            <TextArea fx:id="detailsArea" GridPane.rowIndex="9" />
+            <TextArea fx:id="detailsArea" GridPane.rowIndex="9">
+                <font>
+                    <Font size="13.0"/>
+                </font>
+            </TextArea>
             <Label text="Submitter (optional)" GridPane.rowIndex="10">
                 <GridPane.margin>
-                    <Insets top="5.0" />
+                    <Insets top="5.0"/>
                 </GridPane.margin>
             </Label>
-            <TextField fx:id="submitterField" GridPane.rowIndex="11" />
-            <VBox fx:id="automatedTagsBox" GridPane.rowIndex="12">
+            <TextField fx:id="submitterField" GridPane.rowIndex="11">
+                <font>
+                    <Font size="13.0"/>
+                </font>
+            </TextField>
+            <VBox fx:id="automatedTagsBox" spacing="2.0" GridPane.rowIndex="12">
                 <GridPane>
-                    <Label text="Select Tags" />
-                    <Button mnemonicParsing="false" onAction="#reset" text="Reset" GridPane.columnIndex="1" GridPane.halignment="RIGHT">
+                    <Label text="Select Tags"/>
+                    <Button mnemonicParsing="false" onAction="#reset" text="Reset" GridPane.columnIndex="1"
+                            GridPane.halignment="RIGHT">
                         <font>
-                            <Font size="11.0" />
+                            <Font size="11.0"/>
                         </font>
                     </Button>
                     <columnConstraints>
-                        <ColumnConstraints />
-                        <ColumnConstraints hgrow="SOMETIMES" />
+                        <ColumnConstraints/>
+                        <ColumnConstraints hgrow="SOMETIMES"/>
                     </columnConstraints>
                     <rowConstraints>
-                        <RowConstraints />
+                        <RowConstraints/>
                     </rowConstraints>
                 </GridPane>
-                <ScrollPane style="-fx-background: f8f8f8;">
-                    <VBox fx:id="tagsListBox" spacing="1.0" style="-fx-font-size: 14;">
+                <ScrollPane style="-fx-background: f8f8f8;" VBox.vgrow="SOMETIMES">
+                    <VBox fx:id="tagsListBox" spacing="1.0" style="-fx-font-size: 13;">
                         <padding>
-                            <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
+                            <Insets bottom="5.0" left="10.0" right="10.0" top="5.0"/>
                         </padding>
                     </VBox>
                 </ScrollPane>
+                <GridPane.margin>
+                    <Insets top="1.0"/>
+                </GridPane.margin>
             </VBox>
             <VBox fx:id="manualTagsBox" spacing="5.0" visible="false" GridPane.rowIndex="12">
-                <Label text="Enter the Tags the prompt should be in (each on a separate line)" />
-                <TextArea fx:id="tagsInputArea" />
+                <Label text="Enter the Tags the prompt should be in (each on a separate line)"/>
+                <TextArea fx:id="tagsInputArea">
+                    <font>
+                        <Font size="13.0"/>
+                    </font>
+                </TextArea>
                 <GridPane.margin>
-                    <Insets top="5.0" />
+                    <Insets top="5.0"/>
                 </GridPane.margin>
             </VBox>
             <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" />
+                <ColumnConstraints hgrow="SOMETIMES"/>
             </columnConstraints>
             <rowConstraints>
-                <RowConstraints />
-                <RowConstraints />
-                <RowConstraints />
-                <RowConstraints prefHeight="230.0" />
-                <RowConstraints />
-                <RowConstraints />
-                <RowConstraints />
-                <RowConstraints />
-                <RowConstraints />
-                <RowConstraints />
-                <RowConstraints />
-                <RowConstraints />
-                <RowConstraints prefHeight="230.0" />
+                <RowConstraints/>
+                <RowConstraints/>
+                <RowConstraints/>
+                <RowConstraints prefHeight="230.0"/>
+                <RowConstraints/>
+                <RowConstraints/>
+                <RowConstraints/>
+                <RowConstraints/>
+                <RowConstraints/>
+                <RowConstraints/>
+                <RowConstraints/>
+                <RowConstraints/>
+                <RowConstraints prefHeight="230.0"/>
             </rowConstraints>
             <BorderPane.margin>
-                <Insets left="20.0" right="20.0" top="20.0" />
+                <Insets left="20.0" right="20.0" top="20.0"/>
             </BorderPane.margin>
         </GridPane>
     </center>
     <bottom>
         <GridPane hgap="5.0" BorderPane.alignment="CENTER">
-            <Button mnemonicParsing="false" onAction="#generateJson" text="Generate JSON" />
-            <Button mnemonicParsing="false" onAction="#clear" text="Clear" GridPane.columnIndex="1" />
-            <Button fx:id="unloadImageButton" mnemonicParsing="false" onAction="#unloadImage" text="Unload Image" visible="false" GridPane.columnIndex="2" GridPane.halignment="RIGHT" />
+            <Button mnemonicParsing="false" onAction="#generateJson" text="Generate JSON"/>
+            <Button mnemonicParsing="false" onAction="#clear" text="Clear" GridPane.columnIndex="1"/>
+            <Button fx:id="unloadImageButton" mnemonicParsing="false" onAction="#unloadImage" text="Unload Image"
+                    visible="false" GridPane.columnIndex="2" GridPane.halignment="RIGHT"/>
             <columnConstraints>
-                <ColumnConstraints />
-                <ColumnConstraints />
-                <ColumnConstraints hgrow="SOMETIMES" />
+                <ColumnConstraints/>
+                <ColumnConstraints/>
+                <ColumnConstraints hgrow="SOMETIMES"/>
             </columnConstraints>
             <rowConstraints>
-                <RowConstraints />
+                <RowConstraints/>
             </rowConstraints>
             <BorderPane.margin>
-                <Insets bottom="20.0" left="20.0" right="20.0" top="15.0" />
+                <Insets bottom="20.0" left="20.0" right="20.0" top="15.0"/>
             </BorderPane.margin>
         </GridPane>
     </bottom>
