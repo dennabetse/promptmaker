@@ -31,7 +31,7 @@ public class MainController {
     @FXML
     private VBox imageTypeBox;
     @FXML
-    private Label selectedImagePath;
+    private Label selectedImage;
     @FXML
     private HBox resizeBox;
     @FXML
@@ -74,27 +74,18 @@ public class MainController {
     private PromptMaker promptContent() {
         PromptMaker promptContent = new PromptMaker();
 
-        List<String> shorthands = new ArrayList<>();
-        List<String> tags = new ArrayList<>();
-
         String question = questionField.getText();
         String textContent = textContentArea.getText().replaceAll("\n", "\\\\n");
         String source = answersArea.getText();
-        List<String> answers = new ArrayList<>(splitText(source));
+        List<String> answers = new ArrayList<>(splitText(source, "\n"));
         String shorthand = shorthandsField.getText();
-        if (!shorthand.isEmpty()) {
-            String[] sSplit = shorthand.split(",");
-            for (String shorts : sSplit) {
-                if (!shorts.isBlank()) {
-                    shorthands.add(shorts.trim());
-                }
-            }
-        }
+        List<String> shorthands = new ArrayList<>(splitText(shorthand, ","));
         String details = detailsArea.getText().replaceAll("\n", "\\\\n");
         String submitter = submitterField.getText();
+        List<String> tags = new ArrayList<>();
         if (manualTagsBox.isVisible()) {
             String tagsValue = tagsInputArea.getText();
-            tags.addAll(splitText(tagsValue));
+            tags.addAll(splitText(tagsValue, "\n"));
         } else {
             for (CheckBox checkbox : checkboxes) {
                 if (checkbox.isSelected()) {
@@ -109,6 +100,17 @@ public class MainController {
             return new PromptMaker(question, textContent, answers, shorthands, details, submitter, tags);
         }
         return promptContent;
+    }
+
+    private List<String> splitText(String text, String splitter) {
+        List<String> list = new ArrayList<>();
+        String[] parts = text.split(splitter);
+        for (String p : parts) {
+            if (!p.isBlank()) {
+                list.add(p.trim());
+            }
+        }
+        return list;
     }
 
     private boolean missingField(PromptMaker promptContent) {
@@ -181,17 +183,6 @@ public class MainController {
         checkboxes.clear();
     }
 
-    private List<String> splitText(String text) {
-        List<String> list = new ArrayList<>();
-        String[] parts = text.split("\n");
-        for (String p : parts) {
-            if (!p.isBlank()) {
-                list.add(p.trim());
-            }
-        }
-        return list;
-    }
-
     @FXML
     protected void englishTags() {
         setTags(tags.getEnglish());
@@ -253,7 +244,7 @@ public class MainController {
         alert.initOwner(primaryStage());
         alert.setTitle("About");
         alert.setHeaderText("PromptMaker");
-        alert.setContentText("Version 0.3.2\n© este. All rights reserved.");
+        alert.setContentText("Version 0.3.1\n© este. All rights reserved.");
         alert.show();
     }
 
@@ -283,8 +274,8 @@ public class MainController {
     @FXML
     protected void selectImage() throws IOException {
         image.imageChooser();
-        if (image.getPath() != null) {
-            selectedImagePath.setText(image.getPath());
+        if (image.getSelectedFile() != null) {
+            selectedImage.setText(image.getSelectedFile().getName());
             resizeBox.setVisible(true);
             unloadImageButton.setVisible(true);
         }
@@ -307,24 +298,26 @@ public class MainController {
             fc.savePath();
         }
 
-        PromptMaker promptContent = promptContent();
-        if (missingField(promptContent)) {
+        PromptMaker prompt = promptContent();
+
+        if (missingField(prompt)) {
             System.out.println("\n-----------------------------------------------\nCanceled.\n-----------------------------------------------\n");
             return;
         }
 
-        String fileContent = promptContent.save();
-        System.out.println(fileContent);
+        String promptContent = prompt.save();
+        System.out.println(promptContent);
         System.out.println();
 
-        String fileName = promptContent.getSources().get(0);
+        String fileName = prompt.getSources().get(0);
         if (customFilename.isSelected()) {
             fileName = filenameField.getText();
         }
 
         FileManipulator fm = new FileManipulator();
-        fm.makeJson(fileName, fileContent);
-        if (!selectedImagePath.getText().equals("...")) {
+        fm.makeJson(fileName, promptContent);
+
+        if (!selectedImage.getText().equals("...")) {
             if (resizeImage.isSelected()) {
                 BufferedImage bi = image.resizeImage();
                 if (bi != null) {
@@ -361,7 +354,7 @@ public class MainController {
 
     @FXML
     protected void unloadImage() {
-        selectedImagePath.setText("...");
+        selectedImage.setText("...");
         resizeBox.setVisible(false);
         resizeImage.setSelected(false);
         unloadImageButton.setVisible(false);

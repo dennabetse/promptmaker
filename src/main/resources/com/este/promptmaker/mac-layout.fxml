@@ -70,7 +70,7 @@
                 <Label text="Image"/>
                 <HBox spacing="5.0" style="-fx-border-style: dashed;">
                     <Button minWidth="82.0" mnemonicParsing="false" onAction="#selectImage" text="Choose File"/>
-                    <Label fx:id="selectedImagePath" text="...">
+                    <Label fx:id="selectedImage" text="...">
                         <HBox.margin>
                             <Insets top="5.0"/>
                         </HBox.margin>

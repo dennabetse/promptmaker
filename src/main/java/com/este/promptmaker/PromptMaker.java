@@ -73,6 +73,9 @@ public class PromptMaker {
     }
 
     public String printText() {
+        if (getText() == null){
+            return null;
+        }
         return "\"" + getText() + "\"";
     }
 
@@ -80,7 +83,6 @@ public class PromptMaker {
         if (list.isEmpty()) {
             return "\"\"";
         }
-
         return append(list);
     }
 
@@ -88,7 +90,6 @@ public class PromptMaker {
         if (getShorthands().isEmpty()) {
             return "[]";
         }
-
         return "[\n    " + append(getShorthands()) + "\n  ]";
     }
 

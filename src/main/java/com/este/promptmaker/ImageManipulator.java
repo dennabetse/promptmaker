@@ -14,16 +14,12 @@ public class ImageManipulator {
     private File selectedFile;
     private String pathname;
 
-    public String getPath() {
-        return pathname;
+    public File getSelectedFile() {
+        return selectedFile;
     }
 
     public String getExt() {
         return FilenameUtils.getExtension(selectedFile.getName());
-    }
-
-    public File getSelectedFile() {
-        return selectedFile;
     }
 
     public void imageChooser() throws IOException {
