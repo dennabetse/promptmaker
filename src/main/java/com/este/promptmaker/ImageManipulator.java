@@ -18,6 +18,10 @@ public class ImageManipulator {
         return selectedFile;
     }
 
+    public void unloadFile() {
+        selectedFile = null;
+    }
+
     public String getExt() {
         return FilenameUtils.getExtension(selectedFile.getName());
     }

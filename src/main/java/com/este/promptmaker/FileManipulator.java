@@ -14,70 +14,66 @@ import java.text.Normalizer;
 
 public class FileManipulator {
 
-    private final FolderChooser fc;
+    private final Setting settings;
     private String filename;
 
     public FileManipulator() throws IOException {
-        fc = new FolderChooser();
+        settings = new Setting();
     }
 
     private String toCamelCase(String name) {
         if (name.isEmpty()) {
             name = "untitled";
         }
-        String title = CaseUtils.toCamelCase(name, false, ' ', '_');
 
         return Normalizer
-                .normalize(title, Normalizer.Form.NFD)
+                .normalize(CaseUtils.toCamelCase(name, false, ' ', '_'), Normalizer.Form.NFD)
                 .replaceAll("[^\\p{ASCII}]", "")
                 .replaceAll("[^a-zA-Z0-9]+", "");
     }
 
     private void setFilename(String name) {
-        String shortenName = StringUtils.left(name, 123);
-        String convertedName = toCamelCase(shortenName);
+        String convertedName = toCamelCase(StringUtils.left(name, 123));
 
         int num = 1;
         filename = convertedName + "_" + num;
-        File file = new File(fc.getPath() + "/" + filename + ".json");
-        if(file.getParentFile().mkdirs()){
+        File file = makeFile("json");
+        if (file.getParentFile().mkdirs()) {
             System.out.println();
         }
-        while (file.exists() && num < 201) {
+        while (file.exists() && num < 1001) {
             filename = convertedName + "_" + (num++);
-            file = new File(fc.getPath() + "/" + filename + ".json");
+            file = makeFile("json");
         }
     }
 
-    private void writeToFile(String pathname, String text) throws IOException {
-        PrintWriter writer = new PrintWriter(pathname, StandardCharsets.UTF_8);
+    private File makeFile(String ext) {
+        return new File(settings.get("folder_output") + "/" + filename + "." + ext);
+    }
+
+    public void writeToFile(File file, String text) throws IOException {
+        PrintWriter writer = new PrintWriter(file, StandardCharsets.UTF_8);
         writer.println(text);
         writer.close();
     }
 
+    public void saveTags(String languageFile, String text) throws IOException {
+        File file = new File("config/" + languageFile);
+        if (file.exists() || file.getParentFile().mkdirs()){
+            writeToFile(file, text);
+        }
+    }
+
     public void makeJson(String name, String text) throws IOException {
         setFilename(name);
-        writeToFile(fc.getPath() + "/" + filename + ".json", text);
-    }
-
-    public void saveTags(String languageFile, String text) throws IOException {
-        String pathname = "config/" + languageFile;
-        File file = new File(pathname);
-        if(file.getParentFile().mkdirs()){
-            System.out.println();
-        }
-        writeToFile(pathname, text);
-    }
-
-    private File imageFile(String ext) {
-        return new File(fc.getPath() + "/" + filename + "." + ext);
+        writeToFile(makeFile("json"), text);
     }
 
     public void copyImage(File file, String ext) throws IOException {
-        FileUtils.copyFile(file, imageFile(ext));
+        FileUtils.copyFile(file, makeFile(ext));
     }
 
-    public void copyResizedImage(BufferedImage f, String ext) throws IOException {
-        ImageIO.write(f, ext, imageFile(ext));
+    public void copyResizedImage(BufferedImage bufferedImage, String ext) throws IOException {
+        ImageIO.write(bufferedImage, ext, makeFile(ext));
     }
 }

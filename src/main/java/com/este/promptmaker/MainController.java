@@ -1,10 +1,10 @@
 package com.este.promptmaker;
 
-
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -58,33 +58,37 @@ public class MainController {
     private VBox tagsListBox;
     @FXML
     private Button unloadImageButton;
+    private Setting settings;
     private TagReader tags;
-    private List<CheckBox> checkboxes;
     private ImageManipulator image;
+    private List<CheckBox> checkboxes;
 
-    public void initialize() {
+    public void initialize() throws IOException {
+        settings = new Setting();
         tags = new TagReader();
+        image = new ImageManipulator();
         checkboxes = new ArrayList<>();
+
         promptType.getItems().addAll("Image", "Text");
         promptType.getSelectionModel().selectFirst();
-        image = new ImageManipulator();
-        englishTags();
+
+        getTags();
     }
 
     private PromptMaker promptContent() {
         PromptMaker promptContent = new PromptMaker();
 
-        String question = questionField.getText();
-        String textContent = textContentArea.getText().replaceAll("\n", "\\\\n");
-        String source = answersArea.getText();
+        String question = formattedText(questionField.getText());
+        String textContent = formattedText(textContentArea.getText()).replaceAll("\n", "\\\\n");
+        String source = formattedText(answersArea.getText());
         List<String> answers = new ArrayList<>(splitText(source, "\n"));
-        String shorthand = shorthandsField.getText();
+        String shorthand = formattedText(shorthandsField.getText());
         List<String> shorthands = new ArrayList<>(splitText(shorthand, ","));
-        String details = detailsArea.getText().replaceAll("\n", "\\\\n");
-        String submitter = submitterField.getText();
+        String details = formattedText(detailsArea.getText()).replaceAll("\n", "\\\\n");
+        String submitter = formattedText(submitterField.getText());
         List<String> tags = new ArrayList<>();
         if (manualTagsBox.isVisible()) {
-            String tagsValue = tagsInputArea.getText();
+            String tagsValue = formattedText(tagsInputArea.getText());
             tags.addAll(splitText(tagsValue, "\n"));
         } else {
             for (CheckBox checkbox : checkboxes) {
@@ -100,6 +104,10 @@ public class MainController {
             return new PromptMaker(question, textContent, answers, shorthands, details, submitter, tags);
         }
         return promptContent;
+    }
+
+    private String formattedText(String string){
+        return string.replaceAll("\"","\\\\\"");
     }
 
     private List<String> splitText(String text, String splitter) {
@@ -143,17 +151,12 @@ public class MainController {
     private Stage newStage(FXMLLoader fxmlLoader) throws IOException {
         Scene scene = new Scene(fxmlLoader.load());
         Stage stage = new Stage();
+        stage.getIcons().add(new Image("sparklinlabs.png"));
         stage.setResizable(false);
         stage.initOwner(primaryStage());
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setScene(scene);
         return stage;
-    }
-
-    private void setTags(List<String> list) {
-        removeCheckboxes();
-        createCheckboxes(list);
-        addCheckboxes();
     }
 
     private void createCheckboxes(List<String> tags) {
@@ -183,73 +186,92 @@ public class MainController {
         checkboxes.clear();
     }
 
+    private void setTags(List<String> list) {
+        removeCheckboxes();
+        createCheckboxes(list);
+        addCheckboxes();
+    }
+
+    private void getTags() {
+        String lang = settings.get("tags");
+        switch (lang) {
+            case "en" -> englishTags();
+            case "fr" -> frenchTags();
+            case "de" -> germanTags();
+            case "hu" -> hungarianTags();
+            case "es" -> spanishTags();
+        }
+    }
+
     @FXML
-    protected void englishTags() {
+    private void englishTags() {
         setTags(tags.getEnglish());
     }
 
     @FXML
-    protected void frenchTags() {
+    private void frenchTags() {
         setTags(tags.getFrench());
     }
 
     @FXML
-    protected void germanTags() {
+    private void germanTags() {
         setTags(tags.getGerman());
     }
 
     @FXML
-    protected void hungarianTags() {
+    private void hungarianTags() {
         setTags(tags.getHungarian());
     }
 
     @FXML
-    protected void spanishTags() {
+    private void spanishTags() {
         setTags(tags.getSpanish());
     }
 
     @FXML
-    protected void editTagsView() throws IOException {
+    private void editTagsView() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("tags-view.fxml"));
         Stage stage = newStage(fxmlLoader);
+        stage.setTitle("Tag Editor");
         stage.showAndWait();
         tags = new TagReader();
-        englishTags();
+        getTags();
     }
 
     @FXML
-    protected void automatedInput() {
+    private void automatedInput() {
         automatedTagsBox.setVisible(true);
         manualTagsBox.setVisible(false);
         tagsInputArea.clear();
     }
 
     @FXML
-    protected void manualInput() {
+    private void manualInput() {
         manualTagsBox.setVisible(true);
         automatedTagsBox.setVisible(false);
         clearCheckboxes();
     }
 
     @FXML
-    protected void outputFolderView() throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("folder-view.fxml"));
+    private void settingsView() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("settings-view.fxml"));
         Stage stage = newStage(fxmlLoader);
+        stage.setTitle("Settings");
         stage.show();
     }
 
     @FXML
-    protected void about() {
+    private void about() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.initOwner(primaryStage());
         alert.setTitle("About");
         alert.setHeaderText("PromptMaker");
-        alert.setContentText("Version 0.3.1\n© este. All rights reserved.");
+        alert.setContentText("Version 0.4\n© este. All rights reserved.");
         alert.show();
     }
 
     @FXML
-    protected void promptType() {
+    private void promptType() {
         if (promptType.getValue().equals("Image")) {
             imageTypeBox.setVisible(true);
             textTypeBox.setVisible(false);
@@ -262,17 +284,17 @@ public class MainController {
     }
 
     @FXML
-    protected void customFilename() {
-        if (customFilename.isSelected())
+    private void customFilename() {
+        if (customFilename.isSelected()) {
             filenameField.setVisible(true);
-        else {
+        } else {
             filenameField.setVisible(false);
             filenameField.clear();
         }
     }
 
     @FXML
-    protected void selectImage() throws IOException {
+    private void selectImage() throws IOException {
         image.imageChooser();
         if (image.getSelectedFile() != null) {
             selectedImage.setText(image.getSelectedFile().getName());
@@ -282,20 +304,19 @@ public class MainController {
     }
 
     @FXML
-    protected void reset() {
+    private void reset() {
         clearCheckboxes();
     }
 
     @FXML
-    protected void generateJson() throws IOException {
-        FolderChooser fc = new FolderChooser();
-        if (fc.getPath().isEmpty()) {
-            fc.chooseDirectory();
-            if (fc.getPath().isEmpty()) {
+    private void generateJson() throws IOException {
+        if (settings.get("folder_output").isEmpty()) {
+            settings.chooseDirectory();
+            if (settings.get("folder_output").isEmpty()) {
                 System.out.println("-----------------------------------------------\nCanceled.\n-----------------------------------------------\n");
                 return;
             }
-            fc.savePath();
+            settings.save();
         }
 
         PromptMaker prompt = promptContent();
@@ -317,7 +338,7 @@ public class MainController {
         FileManipulator fm = new FileManipulator();
         fm.makeJson(fileName, promptContent);
 
-        if (!selectedImage.getText().equals("...")) {
+        if (image.getSelectedFile() != null) {
             if (resizeImage.isSelected()) {
                 BufferedImage bi = image.resizeImage();
                 if (bi != null) {
@@ -333,11 +354,11 @@ public class MainController {
             }
         }
 
-        System.out.println("Output folder:\n\"" + fc.getPath() + "\"\n\n-----------------------------------------------\n");
+        System.out.println("Output folder:\n\"" + settings.get("folder_output") + "\"\n\n-----------------------------------------------\n");
     }
 
     @FXML
-    protected void clear() {
+    private void clear() {
         customFilename.setSelected(false);
         filenameField.setVisible(false);
         filenameField.clear();
@@ -353,7 +374,8 @@ public class MainController {
     }
 
     @FXML
-    protected void unloadImage() {
+    private void unloadImage() {
+        image.unloadFile();
         selectedImage.setText("...");
         resizeBox.setVisible(false);
         resizeImage.setSelected(false);
