@@ -15,11 +15,6 @@ public class PromptMaker {
     public PromptMaker() {
     }
 
-    public PromptMaker(String prompt, String text, List<String> sources, List<String> shorthands, String detail, String submitter, List<String> tags) {
-        this(prompt, sources, shorthands, detail, submitter, tags);
-        this.text = text;
-    }
-
     public PromptMaker(String prompt, List<String> sources, List<String> shorthands, String detail, String submitter, List<String> tags) {
         this.prompt = prompt;
         this.sources = sources;
@@ -27,6 +22,11 @@ public class PromptMaker {
         this.details = detail;
         this.submitter = submitter;
         this.tags = tags;
+    }
+
+    public PromptMaker(String prompt, String text, List<String> sources, List<String> shorthands, String detail, String submitter, List<String> tags) {
+        this(prompt, sources, shorthands, detail, submitter, tags);
+        this.text = text;
     }
 
     public String getPrompt() {
@@ -73,7 +73,7 @@ public class PromptMaker {
     }
 
     public String printText() {
-        if (getText() == null){
+        if (getText() == null) {
             return null;
         }
         return "\"" + getText() + "\"";
@@ -88,17 +88,17 @@ public class PromptMaker {
 
     public String printShorthand() {
         if (getShorthands().isEmpty()) {
-            return "[]";
+            return "";
         }
-        return "[\n    " + append(getShorthands()) + "\n  ]";
+        return "\n    " + append(getShorthands()) + "\n  ";
     }
 
     public String save() {
         return "{\n  \"prompt\": \"" + getPrompt()
                 + "\",\n  \"text\": " + printText()
                 + ",\n  \"source\": [\n    " + printList(getSources())
-                + "\n  ],\n  \"shorthand\": " + printShorthand()
-                + ",\n  \"details\": \"" + getDetails()
+                + "\n  ],\n  \"shorthand\": [" + printShorthand()
+                + "],\n  \"details\": \"" + getDetails()
                 + "\",\n  \"submitter\": \"" + getSubmitter()
                 + "\",\n  \"tags\": [\n    " + printList(getTags())
                 + "\n  ]\n}";

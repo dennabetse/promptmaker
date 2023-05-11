@@ -35,16 +35,13 @@ public class TagEditorController {
     private void confirmSave() throws IOException {
         String tags = tagsArea.getText().trim();
         FileManipulator fm = new FileManipulator();
-        if (tagsLanguage.getValue().equals("English")) {
-            fm.saveTags("tags-en.txt", tags);
-        } else if (tagsLanguage.getValue().equals("French")) {
-            fm.saveTags("tags-fr.txt", tags);
-        } else if (tagsLanguage.getValue().equals("German")) {
-            fm.saveTags("tags-de.txt", tags);
-        } else if (tagsLanguage.getValue().equals("Hungarian")) {
-            fm.saveTags("tags-hu.txt", tags);
-        } else if (tagsLanguage.getValue().equals("Spanish")) {
-            fm.saveTags("tags-es.txt", tags);
+        String lang = tagsLanguage.getValue();
+        switch (lang) {
+            case "English" -> fm.saveTags("tags-en.txt", tags);
+            case "French" -> fm.saveTags("tags-fr.txt", tags);
+            case "German" -> fm.saveTags("tags-de.txt", tags);
+            case "Hungarian" -> fm.saveTags("tags-hu.txt", tags);
+            case "Spanish" -> fm.saveTags("tags-es.txt", tags);
         }
     }
 
@@ -54,22 +51,19 @@ public class TagEditorController {
     }
 
     @FXML
-    protected void language() {
-        if (tagsLanguage.getValue().equals("English")) {
-            print(tags.getEnglish());
-        } else if (tagsLanguage.getValue().equals("French")) {
-            print(tags.getFrench());
-        } else if (tagsLanguage.getValue().equals("German")) {
-            print(tags.getGerman());
-        } else if (tagsLanguage.getValue().equals("Hungarian")) {
-            print(tags.getHungarian());
-        } else if (tagsLanguage.getValue().equals("Spanish")) {
-            print(tags.getSpanish());
+    private void language() {
+        String lang = tagsLanguage.getValue();
+        switch (lang) {
+            case "English" -> print(tags.getEnglish());
+            case "French" -> print(tags.getFrench());
+            case "German" -> print(tags.getGerman());
+            case "Hungarian" -> print(tags.getHungarian());
+            case "Spanish" -> print(tags.getSpanish());
         }
     }
 
     @FXML
-    protected void save() throws IOException {
+    private void save() throws IOException {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle(null);
         alert.setHeaderText(null);
@@ -83,7 +77,7 @@ public class TagEditorController {
     }
 
     @FXML
-    protected void cancel() {
+    private void cancel() {
         close();
     }
 }

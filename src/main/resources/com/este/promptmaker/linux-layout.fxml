@@ -20,7 +20,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="mainView" prefHeight="696.0" prefWidth="560.0" xmlns:fx="http://javafx.com/fxml/1"
+<BorderPane fx:id="mainView" prefHeight="735.0" prefWidth="528.0" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.este.promptmaker.MainController">
     <top>
         <MenuBar BorderPane.alignment="CENTER">
@@ -31,14 +31,20 @@
                 <MenuItem mnemonicParsing="false" onAction="#hungarianTags" text="Hungarian"/>
                 <MenuItem mnemonicParsing="false" onAction="#spanishTags" text="Spanish"/>
             </Menu>
-            <Menu mnemonicParsing="false" text="Settings">
+            <Menu mnemonicParsing="false" text="View">
                 <MenuItem mnemonicParsing="false" onAction="#automatedInput" text="Automated Input"/>
                 <MenuItem mnemonicParsing="false" onAction="#manualInput" text="Manual Input"/>
                 <SeparatorMenuItem mnemonicParsing="false"/>
-                <MenuItem mnemonicParsing="false" onAction="#editTagsView" text="Edit Tags"/>
-                <MenuItem mnemonicParsing="false" onAction="#outputFolderView" text="Folder Output"/>
+                <SeparatorMenuItem mnemonicParsing="false"/>
+                <SeparatorMenuItem mnemonicParsing="false"/>
+                <MenuItem mnemonicParsing="false" onAction="#editTagsView" text="Tag Editor"/>
+                <SeparatorMenuItem mnemonicParsing="false"/>
+                <SeparatorMenuItem mnemonicParsing="false"/>
+                <MenuItem mnemonicParsing="false" onAction="#settingsView" text="Settings"/>
             </Menu>
             <Menu mnemonicParsing="false" text="Help">
+                <MenuItem mnemonicParsing="false" onAction="#projectPage" text="Project Page"/>
+                <SeparatorMenuItem mnemonicParsing="false"/>
                 <MenuItem mnemonicParsing="false" onAction="#about" text="About"/>
             </Menu>
         </MenuBar>
