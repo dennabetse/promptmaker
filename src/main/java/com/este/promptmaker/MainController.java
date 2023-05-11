@@ -334,7 +334,7 @@ public class MainController {
             settings.save();
             settings = new Setting();
         }
-        if (!new File(System.getProperty("java.home") + "/bin/settings.ini").exists() || settings.changed()) {
+        if (!new File("settings.ini").exists() || settings.changed()) {
             settings.save();
         }
 
