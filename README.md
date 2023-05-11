@@ -23,7 +23,7 @@ launcher
 ```
 
 ## Usage
-![example](https://user-images.githubusercontent.com/31979112/236230974-21cb9267-2520-412f-93e9-9a9e7bcdf518.png)
+![example](https://github.com/esteb4nned/promptmaker/assets/31979112/4af89e8a-7b3c-4c90-b666-f77f8660bdca)
 | Parameter       | Description                                                                                |
 | :-------------- | :----------------------------------------------------------------------------------------- |
 | Filename        | By default file(s) are named from the first answer you typed in the answer area.           |
@@ -49,7 +49,7 @@ Image prompt
     "movie name"
   ],
   "shorthand": [],
-  "details": "w/e fit your description (can let this field empty)",
+  "details": "w/e fit your description",
   "submitter": "test",
   "tags": [
     "Mainstream",
@@ -82,8 +82,6 @@ Text prompt
 
 - resizer (still a work in progress)
 - add localization (maybe)
-- add image viewer (maybe)
-- save settings
 
 ## Compiling
 
