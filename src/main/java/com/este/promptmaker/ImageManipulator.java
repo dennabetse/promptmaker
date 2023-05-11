@@ -28,7 +28,7 @@ public class ImageManipulator {
 
     public void imageChooser() throws IOException {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setInitialDirectory(new File("../"));
+        fileChooser.setInitialDirectory(new File(System.getProperty("user.home") + "/Desktop"));
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("Any image", "*.png", "*.jpg", "*.svg"),
                 new FileChooser.ExtensionFilter("PNG", "*.png"),

@@ -60,7 +60,7 @@ public class Setting {
 
     public void chooseDirectory() throws IOException {
         DirectoryChooser directory = new DirectoryChooser();
-        directory.setInitialDirectory(new File("../"));
+        directory.setInitialDirectory(new File(System.getProperty("user.home") + "/Desktop"));
         File selectedDirectory = directory.showDialog(null);
         if (selectedDirectory != null) {
             settings.put("folder_output", selectedDirectory.getCanonicalPath());

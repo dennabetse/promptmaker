@@ -36,9 +36,7 @@
                 <MenuItem mnemonicParsing="false" onAction="#manualInput" text="Manual Input"/>
                 <SeparatorMenuItem mnemonicParsing="false"/>
                 <SeparatorMenuItem mnemonicParsing="false"/>
-                <SeparatorMenuItem mnemonicParsing="false"/>
                 <MenuItem mnemonicParsing="false" onAction="#editTagsView" text="Tag Editor"/>
-                <SeparatorMenuItem mnemonicParsing="false"/>
                 <SeparatorMenuItem mnemonicParsing="false"/>
                 <MenuItem mnemonicParsing="false" onAction="#settingsView" text="Settings"/>
             </Menu>
@@ -52,9 +50,9 @@
     <center>
         <GridPane vgap="5.0" BorderPane.alignment="CENTER">
             <HBox spacing="10.0">
-                <Label text="Type of Prompt:"/>
+                <Label minWidth="105" text="Type of Prompt:"/>
                 <ChoiceBox fx:id="promptType" minWidth="77" onAction="#promptType"/>
-                <CheckBox fx:id="customFilename" mnemonicParsing="false" onAction="#customFilename"
+                <CheckBox fx:id="customFilename" minWidth="138" mnemonicParsing="false" onAction="#customFilename"
                           text="Custom Filename"/>
                 <TextField fx:id="filenameField" visible="false" HBox.hgrow="SOMETIMES">
                     <font>
@@ -129,7 +127,7 @@
                     <Font size="13.0"/>
                 </font>
             </TextField>
-            <Label text="Description (optional)" GridPane.rowIndex="8">
+            <Label text="Details (optional)" GridPane.rowIndex="8">
                 <GridPane.margin>
                     <Insets top="5.0"/>
                 </GridPane.margin>

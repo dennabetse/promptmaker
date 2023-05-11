@@ -111,7 +111,9 @@ public class MainController {
     }
 
     private String formattedText(String string) {
-        return string.replaceAll("\"", "\\\\\"");
+        return string
+                .replaceAll("\\\\", "\\\\\\\\")
+                .replaceAll("\"", "\\\\\"");
     }
 
     private List<String> splitText(String text, String splitter) {
@@ -195,11 +197,6 @@ public class MainController {
         createCheckboxes(list);
         addCheckboxes();
         settings.set("tags", lang);
-        try {
-            settings.save();
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
     }
 
     private void getTags() {
@@ -328,12 +325,16 @@ public class MainController {
 
     @FXML
     private void generateJson() throws IOException {
-        if (settings.get("folder_output").isEmpty() || !(new File("settings.ini").exists())) {
+        if (settings.get("folder_output").isEmpty()) {
             settings.chooseDirectory();
             if (settings.get("folder_output").isEmpty()) {
                 System.out.println("-----------------------------------------------\nCanceled.\n-----------------------------------------------\n");
                 return;
             }
+            settings.save();
+            settings = new Setting();
+        }
+        if (!new File(System.getProperty("java.home") + "/bin/settings.ini").exists() || settings.changed()) {
             settings.save();
         }
 

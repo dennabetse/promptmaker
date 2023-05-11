@@ -36,9 +36,7 @@
                 <MenuItem mnemonicParsing="false" onAction="#manualInput" text="Manual Input"/>
                 <SeparatorMenuItem mnemonicParsing="false"/>
                 <SeparatorMenuItem mnemonicParsing="false"/>
-                <SeparatorMenuItem mnemonicParsing="false"/>
                 <MenuItem mnemonicParsing="false" onAction="#editTagsView" text="Tag Editor"/>
-                <SeparatorMenuItem mnemonicParsing="false"/>
                 <SeparatorMenuItem mnemonicParsing="false"/>
                 <MenuItem mnemonicParsing="false" onAction="#settingsView" text="Settings"/>
             </Menu>
@@ -129,7 +127,7 @@
                     <Font size="13.0"/>
                 </font>
             </TextField>
-            <Label text="Description (optional)" GridPane.rowIndex="8">
+            <Label text="Details (optional)" GridPane.rowIndex="8">
                 <GridPane.margin>
                     <Insets top="5.0"/>
                 </GridPane.margin>
