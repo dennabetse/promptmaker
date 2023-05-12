@@ -17,6 +17,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 public class MainController {
 
@@ -61,25 +63,29 @@ public class MainController {
     @FXML
     private Button unloadImageButton;
     private Setting settings;
+    private ResourceBundle bundle;
     private TagReader tags;
     private ImageManipulator image;
     private List<CheckBox> checkboxes;
 
     public void initialize() throws IOException {
         settings = new Setting();
+        bundle = ResourceBundle.getBundle("com.este.promptmaker.locale", new Locale(settings.get("locale")));
         tags = new TagReader();
         image = new ImageManipulator();
         checkboxes = new ArrayList<>();
 
-        promptType.getItems().addAll("Image", "Text");
+        promptType.getItems().addAll("Image", value("key40"));
         promptType.getSelectionModel().selectFirst();
 
         getTags();
     }
 
-    private PromptMaker promptContent() {
-        PromptMaker promptContent = new PromptMaker();
+    private String value(String string) {
+        return bundle.getString(string);
+    }
 
+    private PromptMaker promptContent() {
         String question = formattedText(questionField.getText());
         String textContent = formattedText(textContentArea.getText()).replaceAll("\n", "\\\\n");
         String source = formattedText(answersArea.getText());
@@ -100,19 +106,14 @@ public class MainController {
             }
         }
 
-        String type = promptType.getValue();
-
-        if (type.equals("Image")) {
+        if (promptType.getValue().equals("Image")) {
             return new PromptMaker(question, answers, shorthands, details, submitter, tags);
-        } else if (type.equals("Text")) {
-            return new PromptMaker(question, textContent, answers, shorthands, details, submitter, tags);
         }
-        return promptContent;
+        return new PromptMaker(question, textContent, answers, shorthands, details, submitter, tags);
     }
 
     private String formattedText(String string) {
-        return string
-                .replaceAll("\\\\", "\\\\\\\\")
+        return string.replaceAll("\\\\", "\\\\\\\\")
                 .replaceAll("\"", "\\\\\"");
     }
 
@@ -131,19 +132,19 @@ public class MainController {
         boolean empty = false;
 
         if (promptContent.getPrompt().isEmpty()) {
-            System.out.println("Missing question.");
+            System.out.println(value("key41"));
             empty = true;
         }
-        if (promptType.getValue().equals("Text") && promptContent.getText().isEmpty()) {
-            System.out.println("Missing text.");
+        if (promptType.getValue().equals(value("key40")) && promptContent.getText().isEmpty()) {
+            System.out.println(value("key42"));
             empty = true;
         }
         if (promptContent.getSources().isEmpty()) {
-            System.out.println("Missing answer(s).");
+            System.out.println(value("key43"));
             empty = true;
         }
         if (promptContent.getTags().isEmpty()) {
-            System.out.println("Missing tags.");
+            System.out.println(value("key44"));
             empty = true;
         }
 
@@ -237,9 +238,9 @@ public class MainController {
 
     @FXML
     private void editTagsView() throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("tags-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("tags-view.fxml"), bundle);
         Stage stage = newStage(fxmlLoader);
-        stage.setTitle("Tag Editor");
+        stage.setTitle(bundle.getString("key10"));
         stage.showAndWait();
         tags = new TagReader();
         getTags();
@@ -262,9 +263,9 @@ public class MainController {
     @FXML
     private void settingsView() throws IOException {
         settings.save();
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("settings-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("settings-view.fxml"), bundle);
         Stage stage = newStage(fxmlLoader);
-        stage.setTitle("Settings");
+        stage.setTitle(bundle.getString("key11"));
         stage.showAndWait();
         settings = new Setting();
     }
@@ -279,9 +280,9 @@ public class MainController {
     private void about() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.initOwner(primaryStage());
-        alert.setTitle("About");
+        alert.setTitle(value("key14"));
         alert.setHeaderText("PromptMaker");
-        alert.setContentText("Version 0.4\n© este. All rights reserved.");
+        alert.setContentText("Version 0.4.1\n" + value("key45"));
         alert.show();
     }
 
@@ -328,7 +329,7 @@ public class MainController {
         if (settings.get("folder_output").isEmpty()) {
             settings.chooseDirectory();
             if (settings.get("folder_output").isEmpty()) {
-                System.out.println("-----------------------------------------------\nCanceled.\n-----------------------------------------------\n");
+                System.out.println("-----------------------------------------------\n" + value("key46") + "\n-----------------------------------------------\n");
                 return;
             }
             settings.save();
@@ -341,7 +342,7 @@ public class MainController {
         PromptMaker prompt = promptContent();
 
         if (missingField(prompt)) {
-            System.out.println("\n-----------------------------------------------\nCanceled.\n-----------------------------------------------\n");
+            System.out.println("\n-----------------------------------------------\n" + value("key46") + "\n-----------------------------------------------\n");
             return;
         }
 
@@ -362,18 +363,18 @@ public class MainController {
                 BufferedImage bi = image.resizeImage();
                 if (bi != null) {
                     fm.copyResizedImage(bi, image.getExt());
-                    System.out.println("Image has been resized.\n");
+                    System.out.println(value("key47") + "\n");
                 } else {
                     fm.copyImage(image.getSelectedFile(), image.getExt());
-                    System.out.println("Resize failed. Image has been copied without any change.\n");
+                    System.out.println(value("key48") + "\n");
                 }
             } else {
                 fm.copyImage(image.getSelectedFile(), image.getExt());
-                System.out.println("Image copied.\n");
+                System.out.println(value("key49") + "\n");
             }
         }
 
-        System.out.println("Output folder:\n\"" + settings.get("folder_output") + "\"\n\n-----------------------------------------------\n");
+        System.out.println(value("key38") + ":\n\"" + settings.get("folder_output") + "\"\n\n-----------------------------------------------\n");
     }
 
     @FXML

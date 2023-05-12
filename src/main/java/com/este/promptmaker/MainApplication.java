@@ -7,6 +7,8 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 public class MainApplication extends Application {
     @Override
@@ -26,13 +28,15 @@ public class MainApplication extends Application {
         launch();
     }
 
-    private static FXMLLoader loadResource() {
+    private static FXMLLoader loadResource() throws IOException {
+        Setting settings = new Setting();
+        ResourceBundle bundle = ResourceBundle.getBundle("com.este.promptmaker.locale", new Locale(settings.get("locale")));
         String os = System.getProperty("os.name");
         if (os.contains("Linux")) {
-            return new FXMLLoader(MainApplication.class.getResource("linux-layout.fxml"));
+            return new FXMLLoader(MainApplication.class.getResource("linux-layout.fxml"), bundle);
         } else if (os.contains("Mac")) {
-            return new FXMLLoader(MainApplication.class.getResource("mac-layout.fxml"));
+            return new FXMLLoader(MainApplication.class.getResource("mac-layout.fxml"), bundle);
         }
-        return new FXMLLoader(MainApplication.class.getResource("main-view.fxml"));
+        return new FXMLLoader(MainApplication.class.getResource("main-view.fxml"), bundle);
     }
 }

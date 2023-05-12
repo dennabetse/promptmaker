@@ -43,9 +43,8 @@ public class Setting {
 
     public String get(String key) {
         String defaultValue = "";
-        switch (key) {
-            case "locale" -> defaultValue = "English";
-            case "tags" -> defaultValue = "en";
+        if (key.equals("locale") || key.equals("tags")) {
+            defaultValue = "en";
         }
         return settings.getOrDefault(key, defaultValue);
     }

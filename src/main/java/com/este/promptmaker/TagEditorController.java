@@ -10,7 +10,9 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
+import java.util.ResourceBundle;
 
 public class TagEditorController {
 
@@ -20,12 +22,19 @@ public class TagEditorController {
     private ChoiceBox<String> tagsLanguage;
     @FXML
     private TextArea tagsArea;
+    private ResourceBundle bundle;
     private TagReader tags;
 
-    public void initialize() {
+    public void initialize() throws IOException {
+        Setting settings = new Setting();
+        bundle = ResourceBundle.getBundle("com.este.promptmaker.locale", new Locale(settings.get("locale")));
         tags = new TagReader();
-        tagsLanguage.getItems().addAll("English", "French", "German", "Hungarian", "Spanish");
+        tagsLanguage.getItems().addAll(value("key2"), value("key3"), value("key4"), value("key5"), value("key6"));
         tagsLanguage.getSelectionModel().selectFirst();
+    }
+
+    private String value(String string) {
+        return bundle.getString(string);
     }
 
     private void print(List<String> list) {
@@ -36,16 +45,20 @@ public class TagEditorController {
         String tags = tagsArea.getText().trim();
         FileManipulator fm = new FileManipulator();
         String lang = tagsLanguage.getValue();
-        switch (lang) {
-            case "English" -> fm.saveTags("tags-en.txt", tags);
-            case "French" -> fm.saveTags("tags-fr.txt", tags);
-            case "German" -> fm.saveTags("tags-de.txt", tags);
-            case "Hungarian" -> fm.saveTags("tags-hu.txt", tags);
-            case "Spanish" -> fm.saveTags("tags-es.txt", tags);
+        if (lang.equals(value("key2"))) {
+            fm.saveTags("tags-en.txt", tags);
+        } else if (lang.equals(value("key3"))) {
+            fm.saveTags("tags-fr.txt", tags);
+        } else if (lang.equals(value("key4"))) {
+            fm.saveTags("tags-de.txt", tags);
+        } else if (lang.equals(value("key5"))) {
+            fm.saveTags("tags-hu.txt", tags);
+        } else if (lang.equals(value("key6"))) {
+            fm.saveTags("tags-es.txt", tags);
         }
     }
 
-    private void close(){
+    private void close() {
         Stage stage = (Stage) editTagsView.getScene().getWindow();
         stage.close();
     }
@@ -53,21 +66,27 @@ public class TagEditorController {
     @FXML
     private void language() {
         String lang = tagsLanguage.getValue();
-        switch (lang) {
-            case "English" -> print(tags.getEnglish());
-            case "French" -> print(tags.getFrench());
-            case "German" -> print(tags.getGerman());
-            case "Hungarian" -> print(tags.getHungarian());
-            case "Spanish" -> print(tags.getSpanish());
+        if (lang.equals(value("key2"))) {
+            print(tags.getEnglish());
+        } else if (lang.equals(value("key3"))) {
+            print(tags.getFrench());
+        } else if (lang.equals(value("key4"))) {
+            print(tags.getGerman());
+        } else if (lang.equals(value("key5"))) {
+            print(tags.getHungarian());
+        } else if (lang.equals(value("key6"))) {
+            print(tags.getSpanish());
         }
     }
 
     @FXML
     private void save() throws IOException {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        Stage stage = (Stage) editTagsView.getScene().getWindow();
+        alert.initOwner(stage);
         alert.setTitle(null);
         alert.setHeaderText(null);
-        alert.setContentText("Confirm change(s)?");
+        alert.setContentText(value("key36"));
 
         Optional<ButtonType> option = alert.showAndWait();
         if (option.orElse(null) == ButtonType.OK) {
