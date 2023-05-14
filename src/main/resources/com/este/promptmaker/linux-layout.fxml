@@ -40,8 +40,6 @@
                 <MenuItem mnemonicParsing="false" onAction="#settingsView" text="%key11"/>
             </Menu>
             <Menu mnemonicParsing="false" text="%key12">
-                <MenuItem mnemonicParsing="false" onAction="#projectPage" text="%key13"/>
-                <SeparatorMenuItem mnemonicParsing="false"/>
                 <MenuItem mnemonicParsing="false" onAction="#about" text="%key14"/>
             </Menu>
         </MenuBar>
@@ -49,9 +47,9 @@
     <center>
         <GridPane vgap="5.0" BorderPane.alignment="CENTER">
             <HBox spacing="10.0">
-                <Label minWidth="119.0" text="%key15"/>
+                <Label minWidth="117.0" text="%key15"/>
                 <ChoiceBox fx:id="promptType" minWidth="77.0" onAction="#promptType"/>
-                <CheckBox fx:id="customFilename" minWidth="142.0" mnemonicParsing="false" onAction="#customFilename"
+                <CheckBox fx:id="customFilename" minWidth="139.0" mnemonicParsing="false" onAction="#customFilename"
                           text="%key16"/>
                 <TextField fx:id="filenameField" visible="false" HBox.hgrow="SOMETIMES"/>
             </HBox>
@@ -64,7 +62,7 @@
             <VBox fx:id="imageTypeBox" spacing="5.0" GridPane.rowIndex="3">
                 <Label text="%key18"/>
                 <HBox spacing="5.0" style="-fx-border-style: dashed;">
-                    <Button minWidth="93.0" mnemonicParsing="false" onAction="#selectImage" text="%key19"/>
+                    <Button minWidth="90.0" mnemonicParsing="false" onAction="#selectImage" text="%key19"/>
                     <Label fx:id="selectedImage" text="...">
                         <HBox.margin>
                             <Insets top="5.0"/>

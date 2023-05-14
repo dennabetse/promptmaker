@@ -20,10 +20,12 @@ public class SettingsController {
     private TextField folderOutputField;
     private Setting settings;
     private ResourceBundle bundle;
+    private FileSelector fs;
     private String lang;
 
     public void initialize() throws IOException {
         settings = new Setting();
+        fs = new FileSelector();
         lang = settings.get("locale");
         bundle = ResourceBundle.getBundle("com.este.promptmaker.locale", new Locale(lang));
         setChoiceBox();
@@ -59,14 +61,15 @@ public class SettingsController {
     }
 
     @FXML
-    private void folder() throws IOException {
-        settings.chooseDirectory();
-        folderOutputField.setText(settings.get("folder_output"));
+    private void folder() {
+        String selectedFolder = fs.chooseDirectory();
+        folderOutputField.setText(selectedFolder);
     }
 
     @FXML
     private void confirm() throws IOException {
         settings.set("locale", lang);
+        settings.set("folder_output", folderOutputField.getText());
         settings.save();
         close();
     }

@@ -1,7 +1,5 @@
 package com.este.promptmaker;
 
-import javafx.stage.DirectoryChooser;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -13,20 +11,28 @@ import java.util.stream.Stream;
 
 public class Setting {
 
-    private final HashMap<String, String> settings;
+    private HashMap<String, String> settings;
 
     public Setting() throws IOException {
+        load();
+    }
+
+    public void load() throws IOException {
         settings = readFile();
+    }
+
+    public String settingsFile() {
+        return "settings.ini";
     }
 
     private HashMap<String, String> readFile() throws IOException {
         HashMap<String, String> settings = new HashMap<>();
         List<String> lines = new ArrayList<>();
 
-        try (Stream<String> stream = Files.lines(Paths.get("settings.ini"))) {
+        try (Stream<String> stream = Files.lines(Paths.get(settingsFile()))) {
             stream.forEach(lines::add);
         } catch (IOException e) {
-            File file = new File("settings.ini");
+            File file = new File(settingsFile());
             if (file.createNewFile()) {
                 System.out.println("-----------------------------------------------\nConfiguration file created.\n-----------------------------------------------\n");
             }
@@ -43,7 +49,7 @@ public class Setting {
 
     public String get(String key) {
         String defaultValue = "";
-        if (key.equals("locale") || key.equals("tags")) {
+        if (key.equals("locale") || key.equals("tags_language")) {
             defaultValue = "en";
         }
         return settings.getOrDefault(key, defaultValue);
@@ -53,37 +59,29 @@ public class Setting {
         settings.put(key, value);
     }
 
-    public boolean changed() throws IOException {
-        return !readFile().equals(settings);
-    }
-
-    public void chooseDirectory() throws IOException {
-        DirectoryChooser directory = new DirectoryChooser();
-        directory.setInitialDirectory(new File(System.getProperty("user.home") + "/Desktop"));
-        File selectedDirectory = directory.showDialog(null);
-        if (selectedDirectory != null) {
-            settings.put("folder_output", selectedDirectory.getCanonicalPath());
-        }
-    }
-
     private String getSettings() {
         List<String> save = new ArrayList<>();
-        save.add("locale=" + get("locale"));
-        save.add("tags=" + get("tags"));
-        save.add("folder_output=" + get("folder_output"));
+        save.add("locale=" + get("locale") + "\n");
+        save.add("tags_language=" + get("tags_language") + "\n");
+        save.add("folder_output=" + get("folder_output") + "\n");
+        save.add("last_folder=" + get("last_folder"));
 
         StringBuilder sb = new StringBuilder();
         for (String s : save) {
             sb.append(s);
-            sb.append("\n");
         }
         return sb.toString();
+    }
+
+    public boolean changed() throws IOException {
+        return !readFile().equals(settings);
     }
 
     public void save() throws IOException {
         FileManipulator fm = new FileManipulator();
         if (changed()) {
-            fm.writeToFile(new File("settings.ini"), getSettings());
+            fm.writeToFile(new File(settingsFile()), getSettings());
+            load();
         }
     }
 }

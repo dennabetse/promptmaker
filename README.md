@@ -2,7 +2,7 @@
 
 Tool to make contributing to popsauce easy.
 
-Outil pour permettre de faciliter la création de questions pour popsauce.
+Outil permettant de faciliter la création de questions pour popsauce.
 
 ## Installation
 
@@ -29,7 +29,7 @@ launcher
 | Filename        | By default file(s) are named from the first answer you typed in the answer area.           |
 | Custom filename | In most cases custom filename is unneeded. Example of use case is for prompts asking to complete lyrics or characters from movies/series where you have to set the source as filename. |
 | Image selection | Copy and set the image name the same as the generated json.                                |
-| Resize          | **\*\*experimental\*\*** it might be better to use other way to resize your image.         |
+| Resize          | **\*\*Experimental\*\*** You might be better off using other way to resize your image.     |
 | Text content    | For text type prompt (i.e quotes, lyrics)                                                  |
 | Answer(s)       | Answer(s) should be typed each on a **separate line**.                                     |
 | Short(s)        | Shorthand(s) if added should be **separated by a comma** "**,**"                           |
@@ -81,11 +81,10 @@ Text prompt
 ## Todo
 
 - resizer (still a work in progress)
-- add localization (maybe)
 
 ## Compiling
 
-To compile the project by yourself you will need to make the dependencies used to be modular. I provide the one i made in the modular folder.
+To compile the project by yourself you need the dependencies used to be modular. I provide the one i made in the modular folder.
 
 ```bash
 mvn clean javafx:jlink

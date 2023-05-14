@@ -7,14 +7,17 @@ import java.util.List;
 import java.util.stream.Stream;
 
 public class TagReader {
-
-    private final List<String> english;
-    private final List<String> french;
-    private final List<String> german;
-    private final List<String> hungarian;
-    private final List<String> spanish;
+    private List<String> english;
+    private List<String> french;
+    private List<String> german;
+    private List<String> hungarian;
+    private List<String> spanish;
 
     public TagReader() {
+        load();
+    }
+
+    public void load() {
         english = readFile("tags-en.txt");
         french = readFile("tags-fr.txt");
         german = readFile("tags-de.txt");

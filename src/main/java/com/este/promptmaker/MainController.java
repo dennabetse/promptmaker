@@ -13,7 +13,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -65,14 +64,14 @@ public class MainController {
     private Setting settings;
     private ResourceBundle bundle;
     private TagReader tags;
-    private ImageManipulator image;
+    private FileSelector fs;
     private List<CheckBox> checkboxes;
 
     public void initialize() throws IOException {
         settings = new Setting();
         bundle = ResourceBundle.getBundle("com.este.promptmaker.locale", new Locale(settings.get("locale")));
         tags = new TagReader();
-        image = new ImageManipulator();
+        fs = new FileSelector();
         checkboxes = new ArrayList<>();
 
         promptType.getItems().addAll("Image", value("key40"));
@@ -193,15 +192,15 @@ public class MainController {
         checkboxes.clear();
     }
 
-    private void setTags(List<String> list, String lang) {
+    private void setTags(List<String> list, String language) {
         removeCheckboxes();
         createCheckboxes(list);
         addCheckboxes();
-        settings.set("tags", lang);
+        settings.set("tags_language", language);
     }
 
     private void getTags() {
-        String lang = settings.get("tags");
+        String lang = settings.get("tags_language");
         switch (lang) {
             case "en" -> englishTags();
             case "fr" -> frenchTags();
@@ -242,7 +241,7 @@ public class MainController {
         Stage stage = newStage(fxmlLoader);
         stage.setTitle(bundle.getString("key10"));
         stage.showAndWait();
-        tags = new TagReader();
+        tags.load();
         getTags();
     }
 
@@ -267,13 +266,7 @@ public class MainController {
         Stage stage = newStage(fxmlLoader);
         stage.setTitle(bundle.getString("key11"));
         stage.showAndWait();
-        settings = new Setting();
-    }
-
-    @FXML
-    private void projectPage() {
-        HostServices hostServices = (HostServices) primaryStage().getProperties().get("hostServices");
-        hostServices.showDocument("https://github.com/esteb4nned/promptmaker");
+        settings.load();
     }
 
     @FXML
@@ -282,7 +275,13 @@ public class MainController {
         alert.initOwner(primaryStage());
         alert.setTitle(value("key14"));
         alert.setHeaderText("PromptMaker");
-        alert.setContentText("Version 0.4.1\n" + value("key45"));
+        alert.setContentText("Version 0.4.2\n" + value("key45"));
+        Hyperlink link = new Hyperlink("GitHub");
+        alert.setGraphic(link);
+        link.setOnAction((event) -> {
+            HostServices hostServices = (HostServices) primaryStage().getProperties().get("hostServices");
+            hostServices.showDocument("https://github.com/esteb4nned/PromptMaker");
+        });
         alert.show();
     }
 
@@ -310,10 +309,11 @@ public class MainController {
     }
 
     @FXML
-    private void selectImage() throws IOException {
-        image.imageChooser();
-        if (image.getSelectedFile() != null) {
-            selectedImage.setText(image.getSelectedFile().getName());
+    private void selectImage() {
+        String selectedFile = fs.imageChooser();
+        if (selectedFile != null) {
+            settings.set("last_folder", fs.getSelectedImage().getParent());
+            selectedImage.setText(selectedFile);
             resizeBox.setVisible(true);
             unloadImageButton.setVisible(true);
         }
@@ -327,49 +327,48 @@ public class MainController {
     @FXML
     private void generateJson() throws IOException {
         if (settings.get("folder_output").isEmpty()) {
-            settings.chooseDirectory();
-            if (settings.get("folder_output").isEmpty()) {
+            String selectedFolder = fs.chooseDirectory();
+            if (selectedFolder.isEmpty()) {
                 System.out.println("-----------------------------------------------\n" + value("key46") + "\n-----------------------------------------------\n");
                 return;
             }
-            settings.save();
-            settings = new Setting();
-        }
-        if (!new File("settings.ini").exists() || settings.changed()) {
-            settings.save();
+            settings.set("folder_output", selectedFolder);
         }
 
         PromptMaker prompt = promptContent();
-
         if (missingField(prompt)) {
             System.out.println("\n-----------------------------------------------\n" + value("key46") + "\n-----------------------------------------------\n");
             return;
+        }
+        if (settings.changed()) {
+            settings.save();
+            settings.load();
         }
 
         String promptContent = prompt.save();
         System.out.println(promptContent);
         System.out.println();
-
         String fileName = prompt.getSources().get(0);
         if (customFilename.isSelected()) {
             fileName = filenameField.getText();
         }
 
-        FileManipulator fm = new FileManipulator();
+        FileManipulator fm = new FileManipulator(settings.get("folder_output"));
         fm.makeJson(fileName, promptContent);
 
-        if (image.getSelectedFile() != null) {
+        if (fs.getSelectedImage() != null) {
             if (resizeImage.isSelected()) {
-                BufferedImage bi = image.resizeImage();
+                ImageManipulator im = new ImageManipulator();
+                BufferedImage bi = im.resizeImage(fs.getSelectedImage());
                 if (bi != null) {
-                    fm.copyResizedImage(bi, image.getExt());
+                    fm.copyResizedImage(bi, fs.getExt());
                     System.out.println(value("key47") + "\n");
                 } else {
-                    fm.copyImage(image.getSelectedFile(), image.getExt());
+                    fm.copyImage(fs.getSelectedImage(), fs.getExt());
                     System.out.println(value("key48") + "\n");
                 }
             } else {
-                fm.copyImage(image.getSelectedFile(), image.getExt());
+                fm.copyImage(fs.getSelectedImage(), fs.getExt());
                 System.out.println(value("key49") + "\n");
             }
         }
@@ -395,7 +394,7 @@ public class MainController {
 
     @FXML
     private void unloadImage() {
-        image.unloadFile();
+        fs.unloadFile();
         selectedImage.setText("...");
         resizeBox.setVisible(false);
         resizeImage.setSelected(false);

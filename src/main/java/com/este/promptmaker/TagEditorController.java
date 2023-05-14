@@ -58,9 +58,8 @@ public class TagEditorController {
         }
     }
 
-    private void close() {
-        Stage stage = (Stage) editTagsView.getScene().getWindow();
-        stage.close();
+    private Stage stage() {
+        return (Stage) editTagsView.getScene().getWindow();
     }
 
     @FXML
@@ -82,8 +81,7 @@ public class TagEditorController {
     @FXML
     private void save() throws IOException {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        Stage stage = (Stage) editTagsView.getScene().getWindow();
-        alert.initOwner(stage);
+        alert.initOwner(stage());
         alert.setTitle(null);
         alert.setHeaderText(null);
         alert.setContentText(value("key36"));
@@ -91,12 +89,12 @@ public class TagEditorController {
         Optional<ButtonType> option = alert.showAndWait();
         if (option.orElse(null) == ButtonType.OK) {
             confirmSave();
-            close();
+            stage().close();
         }
     }
 
     @FXML
     private void cancel() {
-        close();
+        stage().close();
     }
 }

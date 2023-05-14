@@ -4,16 +4,13 @@ import java.util.List;
 
 public class PromptMaker {
 
-    private String prompt;
+    private final String prompt;
     private String text;
-    private List<String> sources;
-    private List<String> shorthands;
-    private String details;
-    private String submitter;
-    private List<String> tags;
-
-    public PromptMaker() {
-    }
+    private final List<String> sources;
+    private final List<String> shorthands;
+    private final String details;
+    private final String submitter;
+    private final List<String> tags;
 
     public PromptMaker(String prompt, List<String> sources, List<String> shorthands, String detail, String submitter, List<String> tags) {
         this.prompt = prompt;

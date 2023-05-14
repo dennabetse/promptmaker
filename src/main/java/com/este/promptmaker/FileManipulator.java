@@ -14,11 +14,14 @@ import java.text.Normalizer;
 
 public class FileManipulator {
 
-    private final Setting settings;
+    private String path;
     private String filename;
 
-    public FileManipulator() throws IOException {
-        settings = new Setting();
+    public FileManipulator() {
+    }
+
+    public FileManipulator(String path) {
+        this.path = path;
     }
 
     private String toCamelCase(String name) {
@@ -48,7 +51,7 @@ public class FileManipulator {
     }
 
     private File makeFile(String ext) {
-        return new File(settings.get("folder_output") + "/" + filename + "." + ext);
+        return new File(path + "/" + filename + "." + ext);
     }
 
     public void writeToFile(File file, String text) throws IOException {
@@ -57,8 +60,8 @@ public class FileManipulator {
         writer.close();
     }
 
-    public void saveTags(String languageFile, String text) throws IOException {
-        File file = new File("config/" + languageFile);
+    public void saveTags(String tagsFile, String text) throws IOException {
+        File file = new File("config/" + tagsFile);
         if (file.exists() || file.getParentFile().mkdirs()) {
             writeToFile(file, text);
         }
