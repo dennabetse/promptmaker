@@ -2,6 +2,7 @@ package com.este.promptmaker;
 
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
@@ -16,7 +17,7 @@ public class FileSelector {
         settings = new Setting();
     }
 
-    public String chooseDirectory() {
+    public String chooseDirectory(Stage stage) {
         String path = settings.get("folder_output");
         if (path.isEmpty() || !new File(path).exists()) {
             path = System.getProperty("user.home") + "/Desktop";
@@ -25,7 +26,7 @@ public class FileSelector {
         DirectoryChooser directory = new DirectoryChooser();
         directory.setInitialDirectory(new File(path));
 
-        File selectedDirectory = directory.showDialog(null);
+        File selectedDirectory = directory.showDialog(stage);
         if (selectedDirectory != null) {
             settings.set("folder_output", selectedDirectory.getAbsolutePath());
             return selectedDirectory.getAbsolutePath();
@@ -41,7 +42,7 @@ public class FileSelector {
         return FilenameUtils.getExtension(selectedImage.getName());
     }
 
-    public String imageChooser() {
+    public String imageChooser(Stage stage) {
         String value = "Any image";
         if (settings.get("locale").equals("fr")) {
             value = "Images supportées";
@@ -60,7 +61,7 @@ public class FileSelector {
                 new FileChooser.ExtensionFilter("SVG", "*.svg")
         );
 
-        selectedImage = fileChooser.showOpenDialog(null);
+        selectedImage = fileChooser.showOpenDialog(stage);
         if (selectedImage != null) {
             settings.set("last_folder", selectedImage.getParent());
             return selectedImage.getName();

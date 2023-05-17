@@ -45,9 +45,8 @@ public class SettingsController {
         }
     }
 
-    private void close() {
-        Stage stage = (Stage) settingsView.getScene().getWindow();
-        stage.close();
+    private Stage stage() {
+        return (Stage) settingsView.getScene().getWindow();
     }
 
     @FXML
@@ -62,7 +61,7 @@ public class SettingsController {
 
     @FXML
     private void folder() {
-        String selectedFolder = fs.chooseDirectory();
+        String selectedFolder = fs.chooseDirectory(stage());
         folderOutputField.setText(selectedFolder);
     }
 
@@ -71,11 +70,11 @@ public class SettingsController {
         settings.set("locale", lang);
         settings.set("folder_output", folderOutputField.getText());
         settings.save();
-        close();
+        stage().close();
     }
 
     @FXML
     private void cancel() {
-        close();
+        stage().close();
     }
 }

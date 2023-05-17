@@ -61,17 +61,33 @@ public class MainController {
     private VBox tagsListBox;
     @FXML
     private Button unloadImageButton;
+    @FXML
+    private Label missingPromptLabel;
+    @FXML
+    private Label missingTextLabel;
+    @FXML
+    private Label missingAnswerLabel;
+    @FXML
+    private Label missingTagsLabel;
+    @FXML
+    private Label missingTagsLabel2;
+    @FXML
+    private TextArea resultArea;
+    @FXML
+    private TextArea resultFilenameArea;
+    @FXML
+    private TextField resultField;
     private Setting settings;
     private ResourceBundle bundle;
     private TagReader tags;
-    private FileSelector fs;
+    private FileSelector file;
     private List<CheckBox> checkboxes;
 
     public void initialize() throws IOException {
         settings = new Setting();
         bundle = ResourceBundle.getBundle("com.este.promptmaker.locale", new Locale(settings.get("locale")));
         tags = new TagReader();
-        fs = new FileSelector();
+        file = new FileSelector();
         checkboxes = new ArrayList<>();
 
         promptType.getItems().addAll("Image", value("key40"));
@@ -131,23 +147,37 @@ public class MainController {
         boolean empty = false;
 
         if (promptContent.getPrompt().isEmpty()) {
-            System.out.println(value("key41"));
+            resultArea.appendText(value("key41") + "\n");
+            missingPromptLabel.setVisible(true);
             empty = true;
         }
         if (promptType.getValue().equals(value("key40")) && promptContent.getText().isEmpty()) {
-            System.out.println(value("key42"));
+            resultArea.appendText(value("key42") + "\n");
+            missingTextLabel.setVisible(true);
             empty = true;
         }
         if (promptContent.getSources().isEmpty()) {
-            System.out.println(value("key43"));
+            resultArea.appendText(value("key43") + "\n");
+            missingAnswerLabel.setVisible(true);
             empty = true;
         }
         if (promptContent.getTags().isEmpty()) {
-            System.out.println(value("key44"));
+            resultArea.appendText(value("key44") + "\n");
+            missingTagsLabel.setVisible(true);
+            missingTagsLabel2.setVisible(true);
             empty = true;
         }
 
         return empty;
+    }
+
+    private void hideRequiredLabels() {
+        resultArea.clear();
+        missingPromptLabel.setVisible(false);
+        missingTextLabel.setVisible(false);
+        missingAnswerLabel.setVisible(false);
+        missingTagsLabel.setVisible(false);
+        missingTagsLabel2.setVisible(false);
     }
 
     private Stage primaryStage() {
@@ -275,7 +305,7 @@ public class MainController {
         alert.initOwner(primaryStage());
         alert.setTitle(value("key14"));
         alert.setHeaderText("PromptMaker");
-        alert.setContentText("Version 0.4.2\n" + value("key45"));
+        alert.setContentText("Version 0.5\n" + value("key45"));
         Hyperlink link = new Hyperlink("GitHub");
         alert.setGraphic(link);
         link.setOnAction((event) -> {
@@ -291,6 +321,7 @@ public class MainController {
             imageTypeBox.setVisible(true);
             textTypeBox.setVisible(false);
             textContentArea.clear();
+            missingTextLabel.setVisible(false);
         } else {
             textTypeBox.setVisible(true);
             imageTypeBox.setVisible(false);
@@ -310,9 +341,9 @@ public class MainController {
 
     @FXML
     private void selectImage() {
-        String selectedFile = fs.imageChooser();
+        String selectedFile = file.imageChooser(primaryStage());
         if (selectedFile != null) {
-            settings.set("last_folder", fs.getSelectedImage().getParent());
+            settings.set("last_folder", file.getSelectedImage().getParent());
             selectedImage.setText(selectedFile);
             resizeBox.setVisible(true);
             unloadImageButton.setVisible(true);
@@ -326,54 +357,70 @@ public class MainController {
 
     @FXML
     private void generateJson() throws IOException {
+        hideRequiredLabels();
+
+        PromptMaker prompt = promptContent();
+
+        if (missingField(prompt)) {
+            resultField.setText(value("key46"));
+            resultFilenameArea.setVisible(false);
+            return;
+        }
+
         if (settings.get("folder_output").isEmpty()) {
-            String selectedFolder = fs.chooseDirectory();
+            String selectedFolder = file.chooseDirectory(primaryStage());
             if (selectedFolder.isEmpty()) {
-                System.out.println("-----------------------------------------------\n" + value("key46") + "\n-----------------------------------------------\n");
+                resultField.setText(value("key46"));
                 return;
             }
             settings.set("folder_output", selectedFolder);
         }
 
-        PromptMaker prompt = promptContent();
-        if (missingField(prompt)) {
-            System.out.println("\n-----------------------------------------------\n" + value("key46") + "\n-----------------------------------------------\n");
-            return;
-        }
-        if (settings.changed()) {
-            settings.save();
-            settings.load();
-        }
-
         String promptContent = prompt.save();
-        System.out.println(promptContent);
-        System.out.println();
+
         String fileName = prompt.getSources().get(0);
         if (customFilename.isSelected()) {
             fileName = filenameField.getText();
         }
 
+        if (settings.changed()) {
+            settings.save();
+            settings.load();
+        }
+
         FileManipulator fm = new FileManipulator(settings.get("folder_output"));
         fm.makeJson(fileName, promptContent);
 
-        if (fs.getSelectedImage() != null) {
+        resultArea.setText(promptContent);
+
+        String ext = "";
+        if (file.getSelectedImage() != null) {
+            ext = file.getExt();
             if (resizeImage.isSelected()) {
                 ImageManipulator im = new ImageManipulator();
-                BufferedImage bi = im.resizeImage(fs.getSelectedImage());
+                BufferedImage bi = im.resizeImage(file.getSelectedImage());
                 if (bi != null) {
-                    fm.copyResizedImage(bi, fs.getExt());
-                    System.out.println(value("key47") + "\n");
+                    fm.copyResizedImage(bi);
+                    ext = "png";
+                    resultField.setText(value("key47") + " " + value("key21") + " " + bi.getHeight() + ", " + value("key22") + " " + bi.getWidth());
                 } else {
-                    fm.copyImage(fs.getSelectedImage(), fs.getExt());
-                    System.out.println(value("key48") + "\n");
+                    fm.copyImage(file.getSelectedImage(), file.getExt());
+                    resultField.setText(value("key48"));
                 }
             } else {
-                fm.copyImage(fs.getSelectedImage(), fs.getExt());
-                System.out.println(value("key49") + "\n");
+                fm.copyImage(file.getSelectedImage(), file.getExt());
+                resultField.setText(value("key49"));
             }
         }
 
-        System.out.println(value("key38") + ":\n\"" + settings.get("folder_output") + "\"\n\n-----------------------------------------------\n");
+        if (selectedImage.getText().equals("...")) {
+            resultField.setText(value("key13"));
+            resultFilenameArea.setText(fm.getFilename() + ".json");
+            resultFilenameArea.setVisible(true);
+        } else {
+            resultFilenameArea.setText(fm.getFilename() + ".json\n" + fm.getFilename() + "." + ext);
+            resultFilenameArea.setVisible(true);
+        }
     }
 
     @FXML
@@ -390,11 +437,12 @@ public class MainController {
         submitterField.clear();
         tagsInputArea.clear();
         clearCheckboxes();
+        hideRequiredLabels();
     }
 
     @FXML
     private void unloadImage() {
-        fs.unloadFile();
+        file.unloadFile();
         selectedImage.setText("...");
         resizeBox.setVisible(false);
         resizeImage.setSelected(false);

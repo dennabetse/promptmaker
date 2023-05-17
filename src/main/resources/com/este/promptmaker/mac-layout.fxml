@@ -19,7 +19,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane fx:id="mainView" prefHeight="735.0" prefWidth="528.0" xmlns:fx="http://javafx.com/fxml/1"
+<BorderPane fx:id="mainView" prefHeight="696.0" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.este.promptmaker.MainController">
     <top>
         <MenuBar BorderPane.alignment="CENTER">
@@ -45,20 +45,30 @@
         </MenuBar>
     </top>
     <center>
-        <GridPane vgap="5.0" BorderPane.alignment="CENTER">
+        <GridPane minWidth="518.0" vgap="5.0" BorderPane.alignment="CENTER">
             <HBox spacing="10.0">
                 <Label text="%key15"/>
                 <ChoiceBox fx:id="promptType" minWidth="70.0" onAction="#promptType"/>
-                <CheckBox fx:id="customFilename" mnemonicParsing="false" onAction="#customFilename"
-                          text="%key16"/>
-                <TextField fx:id="filenameField" visible="false" HBox.hgrow="SOMETIMES"/>
+                <CheckBox fx:id="customFilename" mnemonicParsing="false" onAction="#customFilename" text="%key16"/>
+                <TextField fx:id="filenameField" style="-fx-font-size: 14;" visible="false" HBox.hgrow="SOMETIMES"/>
             </HBox>
-            <Label text="%key17" GridPane.rowIndex="1">
+            <GridPane hgap="5.0" GridPane.rowIndex="1">
+                <Label text="%key17"/>
+                <Label fx:id="missingPromptLabel" style="-fx-text-fill: red;" text="%key50"
+                       visible="false"
+                       GridPane.columnIndex="1"/>
+                <columnConstraints>
+                    <ColumnConstraints/>
+                    <ColumnConstraints/>
+                </columnConstraints>
+                <rowConstraints>
+                    <RowConstraints/>
+                </rowConstraints>
                 <GridPane.margin>
                     <Insets top="10.0"/>
                 </GridPane.margin>
-            </Label>
-            <TextField fx:id="questionField" GridPane.rowIndex="2"/>
+            </GridPane>
+            <TextField fx:id="questionField" style="-fx-font-size: 14;" GridPane.rowIndex="2"/>
             <VBox fx:id="imageTypeBox" spacing="5.0" GridPane.rowIndex="3">
                 <Label text="%key18"/>
                 <HBox spacing="5.0" style="-fx-border-style: dashed;">
@@ -86,42 +96,69 @@
                 </GridPane.margin>
             </VBox>
             <VBox fx:id="textTypeBox" spacing="5.0" visible="false" GridPane.rowIndex="3">
-                <Label text="%key23"/>
-                <TextArea fx:id="textContentArea"/>
+                <GridPane hgap="5.0" GridPane.rowIndex="4">
+                    <Label text="%key23"/>
+                    <Label fx:id="missingTextLabel" style="-fx-text-fill: red;" text="%key50"
+                           visible="false"
+                           GridPane.columnIndex="1"/>
+                    <columnConstraints>
+                        <ColumnConstraints/>
+                        <ColumnConstraints/>
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints/>
+                    </rowConstraints>
+                </GridPane>
+                <TextArea fx:id="textContentArea" style="-fx-font-size: 14;"/>
                 <GridPane.margin>
                     <Insets top="5.0"/>
                 </GridPane.margin>
             </VBox>
-            <Label text="%key24" GridPane.rowIndex="4">
+            <GridPane hgap="5.0" GridPane.rowIndex="4">
+                <Label text="%key24"/>
+                <Label fx:id="missingAnswerLabel" style="-fx-text-fill: red;" text="%key50"
+                       visible="false"
+                       GridPane.columnIndex="1"/>
+                <columnConstraints>
+                    <ColumnConstraints/>
+                    <ColumnConstraints/>
+                </columnConstraints>
+                <rowConstraints>
+                    <RowConstraints/>
+                </rowConstraints>
                 <GridPane.margin>
                     <Insets top="5.0"/>
                 </GridPane.margin>
-            </Label>
-            <TextArea fx:id="answersArea" GridPane.rowIndex="5"/>
+            </GridPane>
+            <TextArea fx:id="answersArea" style="-fx-font-size: 14;" GridPane.rowIndex="5"/>
             <Label text="%key25" GridPane.rowIndex="6">
                 <GridPane.margin>
                     <Insets top="5.0"/>
                 </GridPane.margin>
             </Label>
-            <TextField fx:id="shorthandsField" GridPane.rowIndex="7"/>
+            <TextField fx:id="shorthandsField" style="-fx-font-size: 14;" GridPane.rowIndex="7"/>
             <Label text="%key26" GridPane.rowIndex="8">
                 <GridPane.margin>
                     <Insets top="5.0"/>
                 </GridPane.margin>
             </Label>
-            <TextArea fx:id="detailsArea" GridPane.rowIndex="9"/>
+            <TextArea fx:id="detailsArea" style="-fx-font-size: 14;" GridPane.rowIndex="9"/>
             <Label text="%key27" GridPane.rowIndex="10">
                 <GridPane.margin>
                     <Insets top="5.0"/>
                 </GridPane.margin>
             </Label>
-            <TextField fx:id="submitterField" GridPane.rowIndex="11"/>
-            <VBox fx:id="automatedTagsBox" spacing="2.0" GridPane.rowIndex="12">
-                <GridPane>
+            <TextField fx:id="submitterField" style="-fx-font-size: 14;" GridPane.rowIndex="11"/>
+            <VBox fx:id="automatedTagsBox" GridPane.rowIndex="12">
+                <GridPane hgap="5.0">
                     <Label text="%key28"/>
+                    <Label fx:id="missingTagsLabel" style="-fx-text-fill: red;" text="%key50"
+                           visible="false"
+                           GridPane.columnIndex="1"/>
                     <Button mnemonicParsing="false" onAction="#reset" style="-fx-font-size: 12;" text="%key29"
-                            GridPane.columnIndex="1" GridPane.halignment="RIGHT"/>
+                            GridPane.columnIndex="2" GridPane.halignment="RIGHT"/>
                     <columnConstraints>
+                        <ColumnConstraints/>
                         <ColumnConstraints/>
                         <ColumnConstraints hgrow="SOMETIMES"/>
                     </columnConstraints>
@@ -130,7 +167,7 @@
                     </rowConstraints>
                 </GridPane>
                 <ScrollPane style="-fx-background: f8f8f8;" VBox.vgrow="SOMETIMES">
-                    <VBox fx:id="tagsListBox" spacing="1.0">
+                    <VBox fx:id="tagsListBox" spacing="1.0" style="-fx-font-size: 14;">
                         <padding>
                             <Insets bottom="5.0" left="10.0" right="10.0" top="5.0"/>
                         </padding>
@@ -140,13 +177,42 @@
                     <Insets top="1.0"/>
                 </GridPane.margin>
             </VBox>
-            <VBox fx:id="manualTagsBox" spacing="5.0" visible="false" GridPane.rowIndex="12">
-                <Label text="%key30"/>
-                <TextArea fx:id="tagsInputArea"/>
+            <VBox fx:id="manualTagsBox" spacing="3.0" visible="false" GridPane.rowIndex="12">
+                <GridPane hgap="5.0">
+                    <Label text="%key30"/>
+                    <Label fx:id="missingTagsLabel2" style="-fx-text-fill: red;" text="%key50"
+                           visible="false"
+                           GridPane.columnIndex="1"/>
+                    <columnConstraints>
+                        <ColumnConstraints/>
+                        <ColumnConstraints/>
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints/>
+                    </rowConstraints>
+                </GridPane>
+                <TextArea fx:id="tagsInputArea" style="-fx-font-size: 14;"/>
                 <GridPane.margin>
                     <Insets top="5.0"/>
                 </GridPane.margin>
             </VBox>
+            <GridPane hgap="5.0" minWidth="518.0" style="-fx-font-size: 14;" GridPane.rowIndex="13">
+                <Button mnemonicParsing="false" onAction="#generateJson" text="%key31"/>
+                <Button mnemonicParsing="false" onAction="#clear" text="%key32" GridPane.columnIndex="1"/>
+                <Button fx:id="unloadImageButton" mnemonicParsing="false" onAction="#unloadImage" text="%key33"
+                        visible="false" GridPane.columnIndex="2" GridPane.halignment="RIGHT"/>
+                <columnConstraints>
+                    <ColumnConstraints/>
+                    <ColumnConstraints/>
+                    <ColumnConstraints hgrow="SOMETIMES"/>
+                </columnConstraints>
+                <rowConstraints>
+                    <RowConstraints/>
+                </rowConstraints>
+                <GridPane.margin>
+                    <Insets top="8.0"/>
+                </GridPane.margin>
+            </GridPane>
             <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES"/>
             </columnConstraints>
@@ -154,39 +220,32 @@
                 <RowConstraints/>
                 <RowConstraints/>
                 <RowConstraints/>
+                <RowConstraints/>
+                <RowConstraints/>
+                <RowConstraints/>
+                <RowConstraints/>
+                <RowConstraints/>
+                <RowConstraints/>
+                <RowConstraints/>
+                <RowConstraints/>
+                <RowConstraints/>
                 <RowConstraints prefHeight="230.0"/>
                 <RowConstraints/>
-                <RowConstraints/>
-                <RowConstraints/>
-                <RowConstraints/>
-                <RowConstraints/>
-                <RowConstraints/>
-                <RowConstraints/>
-                <RowConstraints/>
-                <RowConstraints prefHeight="230.0"/>
             </rowConstraints>
             <BorderPane.margin>
-                <Insets left="20.0" right="20.0" top="20.0"/>
+                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
             </BorderPane.margin>
         </GridPane>
     </center>
-    <bottom>
-        <GridPane hgap="5.0" BorderPane.alignment="CENTER">
-            <Button mnemonicParsing="false" onAction="#generateJson" text="%key31"/>
-            <Button mnemonicParsing="false" onAction="#clear" text="%key32" GridPane.columnIndex="1"/>
-            <Button fx:id="unloadImageButton" mnemonicParsing="false" onAction="#unloadImage" text="%key33"
-                    visible="false" GridPane.columnIndex="2" GridPane.halignment="RIGHT"/>
-            <columnConstraints>
-                <ColumnConstraints/>
-                <ColumnConstraints/>
-                <ColumnConstraints hgrow="SOMETIMES"/>
-            </columnConstraints>
-            <rowConstraints>
-                <RowConstraints/>
-            </rowConstraints>
+    <right>
+        <VBox prefWidth="350.0" spacing="13.0" BorderPane.alignment="CENTER">
+            <TextArea fx:id="resultArea" editable="false" style="-fx-font-size: 15;" VBox.vgrow="ALWAYS"/>
+            <TextField fx:id="resultField" editable="false" style="-fx-font-size: 14;"/>
+            <TextArea fx:id="resultFilenameArea" editable="false" prefHeight="56.0" style="-fx-font-size: 14;"
+                      visible="false"/>
             <BorderPane.margin>
-                <Insets bottom="20.0" left="20.0" right="20.0" top="15.0"/>
+                <Insets bottom="20.0" right="20.0" top="20.0"/>
             </BorderPane.margin>
-        </GridPane>
-    </bottom>
+        </VBox>
+    </right>
 </BorderPane>

@@ -24,15 +24,20 @@ public class FileManipulator {
         this.path = path;
     }
 
+    public String getFilename() {
+        return filename;
+    }
+
     private String toCamelCase(String name) {
+        name = Normalizer.normalize(CaseUtils.toCamelCase(name, false, ' ', '_'), Normalizer.Form.NFD)
+                .replaceAll("[^\\p{ASCII}]", "")
+                .replaceAll("[^a-zA-Z0-9]+", "");
+
         if (name.isEmpty()) {
             name = "untitled";
         }
 
-        return Normalizer
-                .normalize(CaseUtils.toCamelCase(name, false, ' ', '_'), Normalizer.Form.NFD)
-                .replaceAll("[^\\p{ASCII}]", "")
-                .replaceAll("[^a-zA-Z0-9]+", "");
+        return name;
     }
 
     private void setFilename(String name) {
@@ -76,7 +81,7 @@ public class FileManipulator {
         FileUtils.copyFile(file, makeFile(ext));
     }
 
-    public void copyResizedImage(BufferedImage bufferedImage, String ext) throws IOException {
-        ImageIO.write(bufferedImage, ext, makeFile(ext));
+    public void copyResizedImage(BufferedImage bufferedImage) throws IOException {
+        ImageIO.write(bufferedImage, "png", makeFile("png"));
     }
 }

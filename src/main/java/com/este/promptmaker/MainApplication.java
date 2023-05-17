@@ -19,8 +19,19 @@ public class MainApplication extends Application {
         stage.getIcons().add(new Image("sparklinlabs.png"));
         stage.setTitle("PromptMaker");
         stage.setScene(scene);
-        stage.setMinHeight(735);
-        stage.setMinWidth(528);
+
+        String os = System.getProperty("os.name");
+        if (os.contains("Win")) {
+            stage.setMinHeight(735);
+            stage.setMinWidth(944);
+        } else if (os.contains("Mac")) {
+            stage.setMinHeight(696);
+            stage.setMinWidth(962);
+        } else {
+            stage.setMinHeight(696);
+            stage.setMinWidth(998);
+        }
+
         stage.show();
     }
 
