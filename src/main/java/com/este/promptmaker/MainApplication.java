@@ -13,14 +13,13 @@ import java.util.ResourceBundle;
 public class MainApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = loadResource();
+        String os = System.getProperty("os.name");
+        FXMLLoader fxmlLoader = loadResource(os);
         Scene scene = new Scene(fxmlLoader.load());
         stage.getProperties().put("hostServices", getHostServices());
         stage.getIcons().add(new Image("sparklinlabs.png"));
         stage.setTitle("PromptMaker");
         stage.setScene(scene);
-
-        String os = System.getProperty("os.name");
         if (os.contains("Win")) {
             stage.setMinHeight(735);
             stage.setMinWidth(944);
@@ -31,7 +30,6 @@ public class MainApplication extends Application {
             stage.setMinHeight(696);
             stage.setMinWidth(998);
         }
-
         stage.show();
     }
 
@@ -39,15 +37,14 @@ public class MainApplication extends Application {
         launch();
     }
 
-    private static FXMLLoader loadResource() throws IOException {
+    private static FXMLLoader loadResource(String os) throws IOException {
         Setting settings = new Setting();
         ResourceBundle bundle = ResourceBundle.getBundle("com.este.promptmaker.locale", new Locale(settings.get("locale")));
-        String os = System.getProperty("os.name");
-        if (os.contains("Linux")) {
-            return new FXMLLoader(MainApplication.class.getResource("linux-layout.fxml"), bundle);
+        if (os.contains("Win")) {
+            return new FXMLLoader(MainApplication.class.getResource("main-view.fxml"), bundle);
         } else if (os.contains("Mac")) {
             return new FXMLLoader(MainApplication.class.getResource("mac-layout.fxml"), bundle);
         }
-        return new FXMLLoader(MainApplication.class.getResource("main-view.fxml"), bundle);
+        return new FXMLLoader(MainApplication.class.getResource("linux-layout.fxml"), bundle);
     }
 }

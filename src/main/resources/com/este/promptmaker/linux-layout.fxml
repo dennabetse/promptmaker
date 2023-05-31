@@ -45,11 +45,19 @@
         </MenuBar>
     </top>
     <center>
-        <GridPane minWidth="518.0" vgap="5.0" BorderPane.alignment="CENTER">
+        <GridPane vgap="5.0" BorderPane.alignment="CENTER">
             <HBox spacing="10.0">
-                <Label text="%key15"/>
+                <Label text="%key15">
+                    <HBox.margin>
+                        <Insets top="5.0"/>
+                    </HBox.margin>
+                </Label>
                 <ChoiceBox fx:id="promptType" minWidth="77.0" onAction="#promptType"/>
-                <CheckBox fx:id="customFilename" mnemonicParsing="false" onAction="#customFilename" text="%key16"/>
+                <CheckBox fx:id="customFilename" mnemonicParsing="false" onAction="#customFilename" text="%key16">
+                    <HBox.margin>
+                        <Insets top="5.0"/>
+                    </HBox.margin>
+                </CheckBox>
                 <TextField fx:id="filenameField" style="-fx-font-size: 14;" visible="false" HBox.hgrow="SOMETIMES"/>
             </HBox>
             <GridPane hgap="5.0" GridPane.rowIndex="1">
@@ -196,7 +204,7 @@
                     <Insets top="5.0"/>
                 </GridPane.margin>
             </VBox>
-            <GridPane hgap="5.0" minWidth="518.0" style="-fx-font-size: 14;" GridPane.rowIndex="13">
+            <GridPane hgap="5.0" style="-fx-font-size: 14;" GridPane.rowIndex="13">
                 <Button mnemonicParsing="false" onAction="#generateJson" text="%key31"/>
                 <Button mnemonicParsing="false" onAction="#clear" text="%key32" GridPane.columnIndex="1"/>
                 <Button fx:id="unloadImageButton" mnemonicParsing="false" onAction="#unloadImage" text="%key33"
@@ -229,7 +237,7 @@
                 <RowConstraints/>
                 <RowConstraints/>
                 <RowConstraints/>
-                <RowConstraints prefHeight="230.0"/>
+                <RowConstraints minHeight="98.0" prefHeight="230.0"/>
                 <RowConstraints/>
             </rowConstraints>
             <BorderPane.margin>

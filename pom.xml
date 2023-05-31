@@ -6,7 +6,7 @@
 
     <groupId>com.este</groupId>
     <artifactId>PromptMaker</artifactId>
-    <version>0.5</version>
+    <version>0.5.1</version>
     <name>PromptMaker</name>
 
     <properties>

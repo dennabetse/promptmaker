@@ -14,10 +14,7 @@ import javafx.stage.Stage;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class MainController {
 
@@ -172,7 +169,6 @@ public class MainController {
     }
 
     private void hideRequiredLabels() {
-        resultArea.clear();
         missingPromptLabel.setVisible(false);
         missingTextLabel.setVisible(false);
         missingAnswerLabel.setVisible(false);
@@ -296,7 +292,23 @@ public class MainController {
         Stage stage = newStage(fxmlLoader);
         stage.setTitle(bundle.getString("key11"));
         stage.showAndWait();
-        settings.load();
+        if (settings.changed()) {
+            settings.load();
+        }
+        if (!bundle.getLocale().toString().equals(settings.get("locale"))) {
+            bundle = ResourceBundle.getBundle("com.este.promptmaker.locale", new Locale(settings.get("locale")));
+            String os = System.getProperty("os.name");
+            primaryStage().getScene().setRoot(loadResource(os).load());
+        }
+    }
+
+    private FXMLLoader loadResource(String os) {
+        if (os.contains("Win")) {
+            return new FXMLLoader(MainController.class.getResource("main-view.fxml"), bundle);
+        } else if (os.contains("Mac")) {
+            return new FXMLLoader(MainController.class.getResource("mac-layout.fxml"), bundle);
+        }
+        return new FXMLLoader(MainController.class.getResource("linux-layout.fxml"), bundle);
     }
 
     @FXML
@@ -305,7 +317,7 @@ public class MainController {
         alert.initOwner(primaryStage());
         alert.setTitle(value("key14"));
         alert.setHeaderText("PromptMaker");
-        alert.setContentText("Version 0.5\n" + value("key45"));
+        alert.setContentText("Version 0.5.1\n" + value("key45"));
         Hyperlink link = new Hyperlink("GitHub");
         alert.setGraphic(link);
         link.setOnAction((event) -> {
@@ -357,6 +369,7 @@ public class MainController {
 
     @FXML
     private void generateJson() throws IOException {
+        resultArea.clear();
         hideRequiredLabels();
 
         PromptMaker prompt = promptContent();
