@@ -183,7 +183,7 @@ public class MainController {
     private Stage newStage(FXMLLoader fxmlLoader) throws IOException {
         Scene scene = new Scene(fxmlLoader.load());
         Stage stage = new Stage();
-        stage.getIcons().add(new Image("sparklinlabs.png"));
+        stage.getIcons().add(new Image("cup.png"));
         stage.setResizable(false);
         stage.initOwner(primaryStage());
         stage.initModality(Modality.APPLICATION_MODAL);

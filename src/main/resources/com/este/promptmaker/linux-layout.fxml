@@ -228,16 +228,16 @@
                 <RowConstraints/>
                 <RowConstraints/>
                 <RowConstraints/>
-                <RowConstraints minHeight="108.0" prefHeight="230.0"/>
+                <RowConstraints prefHeight="230.0"/>
+                <RowConstraints/>
+                <RowConstraints prefHeight="190.0"/>
                 <RowConstraints/>
                 <RowConstraints/>
                 <RowConstraints/>
+                <RowConstraints prefHeight="190.0"/>
                 <RowConstraints/>
                 <RowConstraints/>
-                <RowConstraints/>
-                <RowConstraints/>
-                <RowConstraints/>
-                <RowConstraints minHeight="108.0" prefHeight="230.0"/>
+                <RowConstraints prefHeight="230.0"/>
                 <RowConstraints/>
             </rowConstraints>
             <BorderPane.margin>

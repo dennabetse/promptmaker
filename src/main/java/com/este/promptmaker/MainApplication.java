@@ -17,7 +17,7 @@ public class MainApplication extends Application {
         FXMLLoader fxmlLoader = loadResource(os);
         Scene scene = new Scene(fxmlLoader.load());
         stage.getProperties().put("hostServices", getHostServices());
-        stage.getIcons().add(new Image("sparklinlabs.png"));
+        stage.getIcons().add(new Image("cup.png"));
         stage.setTitle("PromptMaker");
         stage.setScene(scene);
         if (os.contains("Win")) {
